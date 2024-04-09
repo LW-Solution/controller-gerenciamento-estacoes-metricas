@@ -1,30 +1,28 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateUsersTable1712580060091 implements MigrationInterface {
+export class CreateUserTable1712666717006 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'measure',
+                name: 'station',
                 columns: [
                     {
-                        name: 'id_measure',
+                        name: 'id_station',
                         type: 'int',
                         isPrimary: true,
                         isGenerated: true,
                         generationStrategy: 'increment',
                     },
                     {
-                        name: 'value',
-                        type: 'int',
+                        name: 'station_description',
+                        type: 'varchar',
+                        isNullable: false,
                     },
                     {
-                        name: 'unixtime',
+                        name: 'location_id',
                         type: 'int',
-                    },
-                    {
-                        name: 'station_parameters_id',
-                        type: 'int',
+                        isNullable: false,
                     },
                 ],
             }),
@@ -32,7 +30,7 @@ export class CreateUsersTable1712580060091 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('measure');
+        await queryRunner.dropTable('station');
     }
 
 }
