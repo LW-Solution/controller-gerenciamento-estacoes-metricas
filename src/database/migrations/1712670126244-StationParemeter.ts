@@ -1,7 +1,6 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class CreateStationParameterTable1712670126244 implements MigrationInterface {
-
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
@@ -32,30 +31,9 @@ export class CreateStationParameterTable1712670126244 implements MigrationInterf
                 ],
             }),
         );
-
-        await queryRunner.createForeignKey(
-            'station_parameter',
-            new TableForeignKey({
-                columnNames: ['parameter_type_id'],
-                referencedColumnNames: ['id_parameter_type'],
-                referencedTableName: 'parameter_type',
-                onDelete: 'CASCADE',
-            }),
-        );
-
-        await queryRunner.createForeignKey(
-            'station_parameter',
-            new TableForeignKey({
-                columnNames: ['measure_id'],
-                referencedColumnNames: ['id_measure'],
-                referencedTableName: 'measure',
-                onDelete: 'CASCADE',
-            }),
-        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('station_parameter');
     }
-
 }
