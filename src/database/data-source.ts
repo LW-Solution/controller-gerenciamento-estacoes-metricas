@@ -21,10 +21,10 @@ import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "localhost",
+    host: "host.docker.internal",
     port: 3306,
-    username: "root",
-    password: "Topsp808!@",
+    username: "username",
+    password: "password",
     database: "estacoes_parametros_db",
     synchronize: true,
     logging: false,
