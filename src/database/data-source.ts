@@ -1,4 +1,6 @@
 import "reflect-metadata"
+import dotenv from "dotenv";
+import path from "path";
 import { DataSource } from "typeorm"
 import {CreateUsersTable1712580060091} from "./migrations/1712580060091-Measure"
 import { CreateUserTable1712666717006 } from "./migrations/1712666717006-Station"
@@ -18,14 +20,17 @@ import { FKParameterTypeToAlert1712752842633 } from "./migrations/1712752842633-
 import { FKMeasureToOccurrence1712753201130 } from "./migrations/1712753201130-FK-MeasureToOccurrence"
 import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-AlertToOccurrence"
 
+const envFile = process.env.NODE_ENV == 'production' ? '.env.prod' : '.env.dev';
+
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "host.docker.internal",
+    host: process.env.HOST,
     port: 3306,
-    username: "username",
-    password: "password",
-    database: "estacoes_parametros_db",
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB,
     synchronize: true,
     logging: false,
     entities: [],
