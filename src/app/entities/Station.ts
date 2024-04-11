@@ -4,7 +4,7 @@ import StationParameter from "./StationParameter";
 import Alert from "./Alert";
 
 @Entity('station')
-export default class Station extends BaseEntity {
+export default class Station  {
     @PrimaryGeneratedColumn()
     id_station: number;
 

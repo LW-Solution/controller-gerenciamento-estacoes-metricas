@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "t
 import Station from "./Station";
 
 @Entity('location')
-export default class Location extends BaseEntity {
+export default class Location  {
     @PrimaryGeneratedColumn()
     id_location: number;
 

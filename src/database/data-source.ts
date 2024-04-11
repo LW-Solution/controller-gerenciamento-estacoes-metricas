@@ -1,6 +1,15 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import {CreateUsersTable1712580060091} from "./migrations/1712580060091-Measure"
+
+import Alert from "../app/entities/Alert"
+import Location from "../app/entities/Location"
+import Measure from "../app/entities/Measure"
+import Occurrence from "../app/entities/Occurrence"
+import ParameterType from "../app/entities/ParameterType"
+import Station from "../app/entities/Station"
+import StationParameter from "../app/entities/StationParameter"
+import Unit from "../app/entities/Unit"
+import { CreateUsersTable1712580060091 } from "./migrations/1712580060091-Measure"
 import { CreateUserTable1712666717006 } from "./migrations/1712666717006-Station"
 import { CreateUserTable1712666846620 } from "./migrations/1712666846620-Location"
 import { CreateUserTable1712671430819 } from "./migrations/1712671430819-Alert"
@@ -17,14 +26,8 @@ import { FKStationToAlert1712752806179 } from "./migrations/1712752806179-FK-Sta
 import { FKParameterTypeToAlert1712752842633 } from "./migrations/1712752842633-FK-ParameterTypeToAlert"
 import { FKMeasureToOccurrence1712753201130 } from "./migrations/1712753201130-FK-MeasureToOccurrence"
 import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-AlertToOccurrence"
-import Alert from "../app/entities/Alert"
-import Location from "../app/entities/Location"
-import Measure from "../app/entities/Measure"
-import Occurrence from "../app/entities/Occurrence"
-import ParameterType from "../app/entities/ParameterType"
-import Station from "../app/entities/Station"
-import StationParameter from "../app/entities/StationParameter"
-import Unit from "../app/entities/Unit"
+
+
 
 
 
@@ -39,14 +42,14 @@ export const AppDataSource = new DataSource({
     logging: false,
     entities: [Alert,Location,Measure,Occurrence,ParameterType,Station,StationParameter,Unit],
     migrations: [
-        CreateUserTable1712666846620,
-        CreateUserTable1712667878923,
-        CreateUserTable1712666717006,
-        CreateParameterTypeTable1712670126244,
-        CreateStationParameterTable1712670126244,
-        CreateUserTable1712671430819,
-        CreateUserTable1712671507559,
         CreateUsersTable1712580060091,
+        CreateUserTable1712666717006,
+        CreateUserTable1712666846620,
+        CreateUserTable1712671430819,
+        CreateStationParameterTable1712670126244,
+        CreateUserTable1712671507559,
+        CreateParameterTypeTable1712670126244,
+        CreateUserTable1712667878923,
         FKLocationToStation1712749066459,
         FKUnitToParameterType1712749463848,
         FKStationToParameterType1712751991452,
@@ -56,6 +59,7 @@ export const AppDataSource = new DataSource({
         FKParameterTypeToAlert1712752842633,
         FKMeasureToOccurrence1712753201130,
         FKAlertToOccurrence1712753259171
+
     ],
     
     subscribers: [],

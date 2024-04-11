@@ -3,7 +3,7 @@ import Alert from "./Alert";
 import Measure from "./Measure";
 
 @Entity('occurrence')
-export default class Occurrence extends BaseEntity {
+export default class Occurrence  {
     @PrimaryGeneratedColumn()
     id_occurrence: number;
 

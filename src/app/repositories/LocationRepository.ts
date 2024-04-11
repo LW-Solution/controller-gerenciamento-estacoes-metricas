@@ -8,4 +8,4 @@ const getLocation = (): Promise<ILocation[]> => {
     return locationRepository.find();
 }
 
-export {getLocation};
+export default {getLocation};

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "t
 import ParameterType from "./ParameterType";
 
 @Entity('unit')
-export default class Unit extends BaseEntity {
+export default class Unit  {
     @PrimaryGeneratedColumn()
     id_unit: number;
 

@@ -5,7 +5,7 @@ import StationParameter from "./StationParameter";
 import Alert from "./Alert";
 
 @Entity('parameter_type')
-export default class ParameterType extends BaseEntity implements IParameterType {
+export default class ParameterType implements IParameterType {
     @PrimaryGeneratedColumn()
     id_parameter_type: number;
 

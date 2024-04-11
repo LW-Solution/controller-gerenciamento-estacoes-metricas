@@ -4,7 +4,7 @@ import Station from "./Station";
 import Occurrence from "./Occurrence";
 
 @Entity('alert')
-export default class Alert extends BaseEntity {
+export default class Alert {
     @PrimaryGeneratedColumn()
     id_alert: number;
 

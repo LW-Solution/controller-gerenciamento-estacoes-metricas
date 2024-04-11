@@ -3,7 +3,7 @@ import StationParameter from "./StationParameter";
 import Occurrence from "./Occurrence";
 
 @Entity('measure')
-export default class Measure extends BaseEntity {
+export default class Measure  {
     @PrimaryGeneratedColumn()
     id_measure: number;
 

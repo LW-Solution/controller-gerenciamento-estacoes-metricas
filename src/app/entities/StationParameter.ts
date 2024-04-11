@@ -4,7 +4,7 @@ import Station from "./Station";
 import Measure from "./Measure";
 
 @Entity('station_parameter')
-export default class StationParameter extends BaseEntity {
+export default class StationParameter  {
     @PrimaryGeneratedColumn()
     station_parameter_id: number;
 
