@@ -17,6 +17,15 @@ import { FKStationToAlert1712752806179 } from "./migrations/1712752806179-FK-Sta
 import { FKParameterTypeToAlert1712752842633 } from "./migrations/1712752842633-FK-ParameterTypeToAlert"
 import { FKMeasureToOccurrence1712753201130 } from "./migrations/1712753201130-FK-MeasureToOccurrence"
 import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-AlertToOccurrence"
+import Alert from "../app/entities/Alert"
+import Location from "../app/entities/Location"
+import Measure from "../app/entities/Measure"
+import Occurrence from "../app/entities/Occurrence"
+import ParameterType from "../app/entities/ParameterType"
+import Station from "../app/entities/Station"
+import StationParameter from "../app/entities/StationParameter"
+import Unit from "../app/entities/Unit"
+
 
 
 export const AppDataSource = new DataSource({
@@ -28,7 +37,7 @@ export const AppDataSource = new DataSource({
     database: "estacoes_parametros_db",
     synchronize: true,
     logging: false,
-    entities: [],
+    entities: [Alert,Location,Measure,Occurrence,ParameterType,Station,StationParameter,Unit],
     migrations: [
         CreateUserTable1712666846620,
         CreateUserTable1712667878923,

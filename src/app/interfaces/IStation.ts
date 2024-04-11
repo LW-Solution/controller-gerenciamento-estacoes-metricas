@@ -1,8 +1,9 @@
-import Ilocation from "./ILocation";
+import ILocation from './ILocation';
+
 interface IStation {
-    id_station: number,
-    station_description:string,
-    location_id?:Ilocation
+    id_station: number;
+    station_description: string;
+    location?: ILocation;
 }
 
 export default IStation;

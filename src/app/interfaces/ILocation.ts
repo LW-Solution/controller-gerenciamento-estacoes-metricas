@@ -1,7 +1,7 @@
-interface Ilocation {
-    id_location: number,
-    location_name:string,
-    coordinate:string
+ interface ILocation {
+    id_location: number;
+    location_name: string;
+    coordinate: string;
 }
 
-export default Ilocation;
+export default ILocation;
