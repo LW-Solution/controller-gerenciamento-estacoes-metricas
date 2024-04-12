@@ -5,8 +5,9 @@ import IStationParameter from "../interfaces/IStationParameter";
 
 const stationParameterRepository = AppDataSource.getRepository(StationParameter)
 
-const getStationParameter = (): Promise<IStationParameter[]> => {
-    return stationParameterRepository.find();
+const getStationParameter = async (): Promise<StationParameter[]> => {
+    const stationParameterList = await stationParameterRepository.find();
+    return stationParameterList;
 } 
 
 const getStationParameterById = async (id: number): Promise<IStationParameter | undefined> => {
