@@ -40,3 +40,5 @@ const deleteStationParameter = async (id: number): Promise<IStationParameter>  =
     const deletedStationParemeter = await stationParameterRepository.remove(stationParameter);
     return deletedStationParemeter;
 }
+
+export {getStationParameter, getStationParameterById, createStationParameter, updateStationParameter, deleteStationParameter}

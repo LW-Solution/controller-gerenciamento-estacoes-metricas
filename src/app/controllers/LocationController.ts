@@ -27,4 +27,15 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
     }
   });
 
+  locationRouter.post("/create", async (req: Request, res: Response) => {
+    const newStationParameter = {...req.body}
+
+    try{
+        const creatingStationParameter = await LocationRepository.createLocation(newStationParameter);
+        return res.status(200).json(creatingStationParameter);
+    }catch(error){
+        return res.status(404).json({ message: "nao foi possivel criar esse parametro da estacao" })
+    }
+})
+
 export default locationRouter;
