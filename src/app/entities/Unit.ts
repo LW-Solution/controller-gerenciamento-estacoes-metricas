@@ -7,7 +7,7 @@ export default class Unit  {
     id_unit: number;
 
     @Column()
-    factor: string;
+    unit: string;
 
     @OneToMany(() => ParameterType, parameterType => parameterType.unit)
     parameterTypes: ParameterType[];

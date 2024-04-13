@@ -25,15 +25,22 @@ const createUnit = async (unit: Unit): Promise<IUnit> => {
     return newUnit;
 }
 
-const updateUnit = async (unit: Unit): Promise<IUnit> => {
-    const idUnit = unit.id_unit;
-    let oldUnit = await unitRepository.findOneOrFail({
-        where: {id_unit: idUnit}
-    })
-    oldUnit = unit;
-    const updatedUnit = await unitRepository.save(oldUnit);
+const updateUnit = async (id: number, unitData: Partial<IUnit>): Promise<IUnit | undefined> => {
+    const existingUnit = await unitRepository.findOne({
+        where: {id_unit: id}
+    });
+  
+    if (!existingUnit) {
+      return undefined;
+    }
+  
+    const updatedUnit = await unitRepository.save({
+      ...existingUnit,
+      ...unitData,
+    });
+  
     return updatedUnit;
-}
+  };
 
 const deleteUnit = async (id: number): Promise<IUnit>  => {
     const unit = await unitRepository.findOneOrFail({
@@ -44,3 +51,4 @@ const deleteUnit = async (id: number): Promise<IUnit>  => {
 }
 
 export {getUnit, getUnitById, createUnit, updateUnit, deleteUnit}
+export default unitRepository

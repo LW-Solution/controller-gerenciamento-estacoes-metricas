@@ -1,5 +1,5 @@
 interface IUnit {
-    id_unit:number,
-    factor:string
+    id_unit?:number,
+    unit:string
 }
 export default IUnit

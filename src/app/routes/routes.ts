@@ -9,8 +9,8 @@ import occurrenceRouter from "../controllers/OccurrenceController";
 
 const routers = Router();
 
+//Localização
 routers.use('/locations', locationRouter);
-routers.use('/locations/:id', locationRouter);
 
 //Parametros da estacao:
 routers.use('/stationParameter', StationParameterRouter)
