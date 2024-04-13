@@ -6,6 +6,7 @@ import stationRouter from "../controllers/StationController";
 import StationParameterRouter from "../controllers/StationParameterController";
 import unitRouter from "../controllers/UnitController";
 import occurrenceRouter from "../controllers/OccurrenceController";
+import measureRouter from "../controllers/MeasureController";
 
 const routers = Router();
 
@@ -29,6 +30,9 @@ routers.use('/unit' , unitRouter)
 
 //Ocorrencias
 routers.use('/occurrence', occurrenceRouter)
+
+//Medidas
+routers.use('/measure', measureRouter)
 
 export default routers;
 

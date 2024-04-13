@@ -1,10 +1,13 @@
 import { Request, Response, Router } from "express";
 import { createAlert, deleteAlert, getAlert, getAlertById, updateAlert } from "../repositories/AlertRepository";
+import IAlert from "../interfaces/IAlert";
+import IParameterType from "../interfaces/IParameterType";
+import IStation from "../interfaces/IStation";
 
 
 const alertRouter = Router();
 
-alertRouter.get("/getAll", async(req: Request, res: Response) => {
+alertRouter.get("/", async(req: Request, res: Response) => {
     try{
         const alertList = await getAlert();
         return res.status(200).json(alertList);
@@ -13,7 +16,7 @@ alertRouter.get("/getAll", async(req: Request, res: Response) => {
     }
 })
 
-alertRouter.get("/getOne/:id", async (req: Request, res: Response) => {
+alertRouter.get("/:id", async (req: Request, res: Response) => {
     const {id} = req.params;
     let idStringToIdNumber = parseInt(id);
     
@@ -25,30 +28,42 @@ alertRouter.get("/getOne/:id", async (req: Request, res: Response) => {
     }
 })
 
-alertRouter.post("/create", async (req: Request, res: Response) => {
-    const newAlert = {...req.body}
-
-    try{
-        const creatingAlert = await createAlert(newAlert);
-        return res.status(200).json(creatingAlert);
-    }catch(error){
-        return res.status(404).json({ message: "nao foi possivel criar esse alerta" })
+alertRouter.post("/", async (req: Request, res: Response) => {
+    const { condition, station_id, parameter_type_id } = req.body;
+  
+    const newAlert: IAlert = {
+      id_alert: 0, // Pode ser 0 se for gerado automaticamente pelo banco de dados
+      condition,
+      station_id: station_id,
+      parameter_type_id: parameter_type_id
+    };
+  
+    try {
+      const createdAlert = await createAlert(newAlert);
+      return res.status(200).json(createdAlert);
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao criar alerta", error: error.message });
     }
-})
+  });
 
-alertRouter.put("/update", async (req: Request, res: Response) => {
-    
-    const newAlert = {...req.body}
-
-    try{
-        const updatingAlert = await updateAlert(newAlert);
-        return res.status(200).json(updatingAlert);
-    }catch(error){
-        return res.status(404).json({ message: "não foi possível atualizar o alerta"})
+  alertRouter.put("/:id", async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { condition, stationIdStation, parameterTypeIdParameterType } = req.body;
+  
+    try {
+      const result = await updateAlert(parseInt(id, 10), condition, stationIdStation, parameterTypeIdParameterType);
+      
+      if (!result) {
+        return res.status(404).json({ message: "Alerta não encontrado para atualização" });
+      }
+      
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json({ message: "Erro ao atualizar alerta", error: error.message });
     }
-})
+  });
 
-alertRouter.delete("/delete/:id", async (req: Request, res: Response) => {
+alertRouter.delete("/:id", async (req: Request, res: Response) => {
     const {id} = req.params;
     let idStringToIdNumber = parseInt(id);
 

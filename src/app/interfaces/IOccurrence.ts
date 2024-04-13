@@ -3,8 +3,8 @@ import IMeasure from "./IMeasure";
 
 interface IOccurrence {
     id_occurrence?: number;
-    measure_id?: IMeasure;
-    alert_id?: IAlert;
+    alertIdAlert?: IAlert;
+    measureIdMeasure?: IMeasure;
 }
 
 export default IOccurrence;

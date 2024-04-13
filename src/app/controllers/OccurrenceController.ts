@@ -7,7 +7,7 @@ const occurrenceRouter = Router();
 // Rota para buscar todas as ocorrências
 occurrenceRouter.get('/', async (_req: Request, res: Response): Promise<Response> => {
   try {
-    const occurrences = await OccurrenceRepository.getOccurrence();
+    const occurrences = await OccurrenceRepository.getOccurrences();
     return res.status(200).json(occurrences);
   } catch (error) {
     console.error(error);
@@ -47,31 +47,34 @@ occurrenceRouter.post('/', async (req: Request, res: Response): Promise<Response
 // Rota para atualizar uma ocorrência existente
 occurrenceRouter.put('/:id', async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
-  
+  const updatedOccurrence: IOccurrence = req.body;
+
   try {
-    const updatedOccurrence = await OccurrenceRepository.updateOccurrence({
-      id_occurrence: parseInt(id, 10),
-      ...req.body,
-    });
+    const updated = await OccurrenceRepository.updateOccurrence(parseInt(id, 10), updatedOccurrence);
     
-    return res.status(200).json(updatedOccurrence);
+    if (!updated) {
+      return res.status(404).json({ message: 'Ocorrência não encontrada para atualização' });
+    }
+
+    return res.status(200).json(updated);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Failed to update occurrence', error: error.message });
+    return res.status(500).json({ message: 'Erro ao atualizar ocorrência', error: error.message });
   }
 });
 
 // Rota para deletar uma ocorrência
 occurrenceRouter.delete('/:id', async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
-  
+
   try {
     await OccurrenceRepository.deleteOccurrence(parseInt(id, 10));
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Failed to delete occurrence', error: error.message });
+    return res.status(500).json({ message: 'Erro ao excluir ocorrência', error: error.message });
   }
 });
+
 
 export default occurrenceRouter;

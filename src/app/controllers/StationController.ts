@@ -5,16 +5,16 @@ import { createStation, deleteStation, getStation, getStationById, updateStation
 
 const stationRouter = Router();
 
-stationRouter.get("/getAll", async(req: Request, res: Response) => {
+stationRouter.get("/", async(req: Request, res: Response) => {
     try{
         const stationList = await getStation();
         return res.status(200).json(stationList);
     }catch(error){
-        return res.status(404).json({ message: "nao foi possivel buscar os dados das estacoes"})
+        return res.status(404).json({ message: "Não foi possível buscar os dados das estações" })
     }
 })
 
-stationRouter.get("/getOne/:id", async (req: Request, res: Response) => {
+stationRouter.get("/:id", async (req: Request, res: Response) => {
     const {id} = req.params;
     let idStringToIdNumber = parseInt(id);
     
@@ -22,11 +22,11 @@ stationRouter.get("/getOne/:id", async (req: Request, res: Response) => {
         const findingStation = await getStationById(idStringToIdNumber);
         return res.status(200).json(findingStation);
     }catch(error){
-        return res.status(404).json({ message: "não foi possivel buscar a estacao solicitada" })   
+        return res.status(404).json({ message: "Não foi possível buscar a estação solicitada" })   
     }
 })
 
-stationRouter.post("/create", async (req: Request, res: Response) => {
+stationRouter.post("/", async (req: Request, res: Response) => {
     const newStation = {...req.body}
 
     try{
@@ -37,19 +37,23 @@ stationRouter.post("/create", async (req: Request, res: Response) => {
     }
 })
 
-stationRouter.put("/update", async (req: Request, res: Response) => {
-    
-    const newStation = {...req.body}
-
-    try{
-        const updatingStation = await updateStation(newStation);
-        return res.status(200).json(updatingStation);
-    }catch(error){
-        return res.status(404).json({ message: "não foi possível atualizar a estação"})
+stationRouter.put("/:id", async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { station_description, locationIdLocation } = req.body;
+  
+    try {
+      const updatingStation = await updateStation(parseInt(id, 10), station_description, locationIdLocation);
+      return res.status(200).json(updatingStation);
+    } catch (error) {
+      return res.status(404).json({ message: "não foi possível atualizar a estação" });
     }
-})
+});
 
-stationRouter.delete("/delete/:id", async (req: Request, res: Response) => {
+
+
+  
+
+stationRouter.delete("/:id", async (req: Request, res: Response) => {
     const {id} = req.params;
     let idStringToIdNumber = parseInt(id);
 

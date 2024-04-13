@@ -1,12 +1,10 @@
 import { Request,Response,Router } from "express";
-import Location from "../entities/Location";
-import LocationRepository from '../repositories/LocationRepository';
-import ILocation from "../interfaces/ILocation";
+import { createLocation, deleteLocation, getLocation, getLocationById, updateLocation } from "../repositories/LocationRepository";
 
 const locationRouter = Router();
 
 locationRouter.get('/', async (_req: Request, res: Response): Promise<Response>=>{
-    const location = await LocationRepository.getLocation();
+    const location = await getLocation();
     return res.status(200).json(location);
 });
 
@@ -14,7 +12,7 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
   
     try {
-      const location = await LocationRepository.getLocationById(parseInt(id));
+      const location = await getLocationById(parseInt(id));
       
       if (!location) {
         return res.status(404).json({ message: 'Location not found' });
@@ -31,7 +29,7 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
     const newStationParameter = {...req.body}
 
     try{
-        const creatingStationParameter = await LocationRepository.createLocation(newStationParameter);
+        const creatingStationParameter = await createLocation(newStationParameter);
         return res.status(200).json(creatingStationParameter);
     }catch(error){
         return res.status(404).json({ message: "nao foi possivel criar esse parametro da Location" })
@@ -43,7 +41,7 @@ locationRouter.put("/:id", async (req: Request, res: Response) => {
   const { location_name, coordinate } = req.body;
 
   try {
-    const updatedLocation = await LocationRepository.updateLocation(parseInt(id), {
+    const updatedLocation = await updateLocation(parseInt(id), {
       location_name,
       coordinate,
     });
@@ -63,7 +61,7 @@ locationRouter.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const deletedLocation = await LocationRepository.deleteLocation(parseInt(id));
+    const deletedLocation = await deleteLocation(parseInt(id));
 
     if (!deletedLocation) {
       return res.status(404).json({ message: 'Location not found' });

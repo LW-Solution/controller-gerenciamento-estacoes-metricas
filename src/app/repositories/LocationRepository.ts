@@ -53,4 +53,5 @@ const deleteLocation = async (id: number): Promise<boolean> => {
 };
   
 
-export default { getLocation, getLocationById, createLocation, updateLocation, deleteLocation };
+export  { getLocation, getLocationById, createLocation, updateLocation, deleteLocation };
+export default locationRepository;
