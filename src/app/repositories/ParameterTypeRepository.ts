@@ -128,3 +128,5 @@ export {
   updateParameterType,
   deleteParameterType
 };
+
+export default parameterTypeRepository;
