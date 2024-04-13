@@ -15,19 +15,42 @@ const getLocationById = async (id: number): Promise<ILocation | undefined> => {
     return location;
   };
 
-<<<<<<< HEAD
-  const createLocation = async (locationData: ILocation): Promise<ILocation> => {
-    const newLocation = locationRepository.create(locationData);
-    return await locationRepository.save(newLocation);
-  };
-=======
 
   const createLocation = async (location: Location): Promise<ILocation | undefined>=> {
     const newStationParameter = await locationRepository.create(location);
     locationRepository.save(newStationParameter)
     return newStationParameter;
 }
->>>>>>> cf4b12961d496de1b1bddbb07ecfd7d5d1191ce4
+
+const updateLocation = async (id: number, updatedLocationData: ILocation): Promise<ILocation | undefined> => {
+  const locationToUpdate = await locationRepository.findOne({
+    where: {id_location: id}
+  });
+
+  if (!locationToUpdate) {
+    return undefined;
+  }
+
+  const updatedLocation = {
+    ...locationToUpdate,
+    ...updatedLocationData,
+  };
+
+  return locationRepository.save(updatedLocation);
+};
+
+const deleteLocation = async (id: number): Promise<boolean> => {
+  const locationToDelete = await locationRepository.findOne({
+    where: {id_location: id}
+  });
+
+  if (!locationToDelete) {
+    return false;
+  }
+
+  await locationRepository.remove(locationToDelete);
+  return true;
+};
   
 
-export default { getLocation, getLocationById, createLocation };
+export default { getLocation, getLocationById, createLocation, updateLocation, deleteLocation };
