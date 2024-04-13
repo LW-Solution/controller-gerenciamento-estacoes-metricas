@@ -9,7 +9,7 @@ const stationParameterRepository = AppDataSource.getRepository(StationParameter)
 
 const getStationParameters = async (): Promise<IStationParameter[]> => {
   const stationParameterList = await stationParameterRepository.find({
-    relations: ["parameter_type", "station"], // Corrigido para incluir as relações corretas
+    relations: ["parameter_type_id", "station_id"],
   });
 
   return stationParameterList;
@@ -18,7 +18,7 @@ const getStationParameters = async (): Promise<IStationParameter[]> => {
 const getStationParameterById = async (id: number): Promise<IStationParameter | undefined> => {
   const stationParameter = await stationParameterRepository.findOne({
     where: { station_parameter_id: id },
-    relations: ["parameter_type", "station"],
+    relations: ["parameter_type_id", "station_id"],
   });
 
   return stationParameter;
@@ -65,17 +65,19 @@ const updateStationParameter = async (id: number, parameterTypeIdParameterType: 
   try {
     const existingStationParameter = await stationParameterRepository.findOne({
       where: { station_parameter_id: id },
-      relations: ["parameter_type", "station"],
+      relations: ["parameter_type", "station"], // Carrega as relações com parameter_type e station
     });
 
     if (!existingStationParameter) {
       return undefined;
     }
 
+    // Verifique se parameterTypeIdParameterType foi fornecido e se é um número
     if (typeof parameterTypeIdParameterType === 'number') {
       existingStationParameter.parameter_type.id_parameter_type = parameterTypeIdParameterType;
     }
 
+    // Verifique se stationIdStation foi fornecido e se é um número
     if (typeof stationIdStation === 'number') {
       existingStationParameter.station.id_station = stationIdStation;
     }
@@ -87,8 +89,6 @@ const updateStationParameter = async (id: number, parameterTypeIdParameterType: 
     throw new Error(`Erro ao atualizar parâmetro de estação: ${error}`);
   }
 };
-
-
 
 
 
@@ -105,3 +105,4 @@ export {
   updateStationParameter,
   deleteStationParameter,
 };
+export default stationParameterRepository;
