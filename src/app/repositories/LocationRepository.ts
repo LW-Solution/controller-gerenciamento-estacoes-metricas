@@ -14,6 +14,11 @@ const getLocationById = async (id: number): Promise<ILocation | undefined> => {
     });
     return location;
   };
+
+  const createLocation = async (locationData: ILocation): Promise<ILocation> => {
+    const newLocation = locationRepository.create(locationData);
+    return await locationRepository.save(newLocation);
+  };
   
 
-export default { getLocation, getLocationById };
+export default { getLocation, getLocationById, createLocation };

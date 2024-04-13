@@ -1,5 +1,5 @@
  interface ILocation {
-    id_location: number;
+    id_location?: number;
     location_name: string;
     coordinate: string;
 }

@@ -27,4 +27,14 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
     }
   });
 
+  locationRouter.post('/', async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { location_name, coordinate } = req.body;
+      const newLocation = await LocationRepository.createLocation({ location_name, coordinate });
+      return res.status(201).json(newLocation);
+    } catch (error) {
+      return res.status(500).json({ message: 'Failed to create location', error: error.message });
+    }
+  });
+
 export default locationRouter;
