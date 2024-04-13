@@ -26,7 +26,7 @@ const createOccurrence = async (occurrence: Occurrence): Promise<IOccurrence> =>
 }
 
 const updateOccurrence = async (occurrence: Occurrence): Promise<IOccurrence> => {
-    const idOccurrence = Occurrence.id_occurrence;
+    const idOccurrence = occurrence.id_occurrence;
     let oldOccurrence = await occurrenceRepository.findOneOrFail({
         where: {id_occurrence: idOccurrence}
     })
@@ -43,4 +43,4 @@ const deleteOccurrence = async (id: number): Promise<IOccurrence>  => {
     return deletedOccurrence;
 }
 
-export {getOccurrence, getOccurrenceById, createOccurrence, updateOccurrence, deleteOccurrence}
+export default {getOccurrence, getOccurrenceById, createOccurrence, updateOccurrence, deleteOccurrence}

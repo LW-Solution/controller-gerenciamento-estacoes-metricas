@@ -5,6 +5,7 @@ import parameterTypeRouter from "../controllers/ParameterTypeController";
 import stationRouter from "../controllers/StationController";
 import StationParameterRouter from "../controllers/StationParameterController";
 import unitRouter from "../controllers/UnitController";
+import occurrenceRouter from "../controllers/OccurrenceController";
 
 const routers = Router();
 
@@ -25,5 +26,9 @@ routers.use('/alert', alertRouter)
 
 //Unidades
 routers.use('/unit' , unitRouter)
+
+//Ocorrencias
+routers.use('/occurrence', occurrenceRouter)
+
 export default routers;
 

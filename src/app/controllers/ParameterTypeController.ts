@@ -11,7 +11,7 @@ parameterTypeRouter.post("/create", async (req: Request, res: Response) => {
         const creatingParameterType = await createParameterType(newParameterType);
         return res.status(200).json(creatingParameterType);
     }catch(error){
-        return res.status(404).json({ message: "nao foi possivel criar esse parametro da estacao" })
+        return res.status(404).json({ message: "nao foi possivel criar esse parametro da Tipo Parametro" })
     }
 })
 
