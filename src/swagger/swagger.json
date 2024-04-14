@@ -1,0 +1,285 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ILocation": {
+				"properties": {
+					"id_location": {
+						"type": "number",
+						"format": "double"
+					},
+					"location_name": {
+						"type": "string"
+					},
+					"coordinate": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"location_name",
+					"coordinate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IStation": {
+				"properties": {
+					"id_station": {
+						"type": "number",
+						"format": "double"
+					},
+					"station_description": {
+						"type": "string"
+					},
+					"location": {
+						"$ref": "#/components/schemas/ILocation"
+					}
+				},
+				"required": [
+					"id_station",
+					"station_description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUnit": {
+				"properties": {
+					"id_unit": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"unit"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IParameterType": {
+				"properties": {
+					"id_parameter_type": {
+						"type": "number",
+						"format": "double"
+					},
+					"factor": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"Unit": {
+						"$ref": "#/components/schemas/IUnit"
+					}
+				},
+				"required": [
+					"factor",
+					"offset"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IAlert": {
+				"properties": {
+					"id_alert": {
+						"type": "number",
+						"format": "double"
+					},
+					"condition": {
+						"type": "string"
+					},
+					"station_id": {
+						"$ref": "#/components/schemas/IStation"
+					},
+					"parameter_type_id": {
+						"$ref": "#/components/schemas/IParameterType"
+					}
+				},
+				"required": [
+					"id_alert",
+					"condition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "controller-servicos",
+		"version": "1.0.0",
+		"description": "readme do projeto",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/alert": {
+			"get": {
+				"operationId": "GetAllAlerts",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IAlert"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateAlert",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IAlert"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IAlert"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/alert/{id}": {
+			"get": {
+				"operationId": "GetAlertById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IAlert"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateAlert",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IAlert"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IAlert"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteAlert",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IAlert"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
