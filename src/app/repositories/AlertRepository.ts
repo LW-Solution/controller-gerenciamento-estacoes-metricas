@@ -12,7 +12,10 @@ const alertRepository = AppDataSource.getRepository(Alert);
 
 
 const getAlert = async (): Promise<IAlert[]> => {
-    const alertList = await alertRepository.find();
+    const alertList = await alertRepository.find({
+        relations: ["parameter_type","station"]
+    });
+
     return alertList;
 };
 

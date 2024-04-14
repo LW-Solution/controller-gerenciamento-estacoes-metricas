@@ -9,7 +9,7 @@ const stationParameterRepository = AppDataSource.getRepository(StationParameter)
 
 const getStationParameters = async (): Promise<IStationParameter[]> => {
   const stationParameterList = await stationParameterRepository.find({
-    relations: ["parameter_type_id", "station_id"],
+    relations: ["parameter_type", "station"],
   });
 
   return stationParameterList;
@@ -18,7 +18,7 @@ const getStationParameters = async (): Promise<IStationParameter[]> => {
 const getStationParameterById = async (id: number): Promise<IStationParameter | undefined> => {
   const stationParameter = await stationParameterRepository.findOne({
     where: { station_parameter_id: id },
-    relations: ["parameter_type_id", "station_id"],
+    relations: ["parameter_type", "station"],
   });
 
   return stationParameter;
