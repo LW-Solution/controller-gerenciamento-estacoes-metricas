@@ -14,7 +14,7 @@ COPY src ./src
 RUN npm install
 
 # Expõe a porta que o aplicativo está ouvindo
-EXPOSE 3333
+EXPOSE 3001
 
 # Comando para iniciar o aplicativo
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:dev"]

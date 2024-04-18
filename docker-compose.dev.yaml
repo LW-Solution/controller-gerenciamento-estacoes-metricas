@@ -24,9 +24,9 @@ services:
         ipv4_address: 172.18.0.5
 
   controller-gerenciamento-estacoes-metricas:
-    image: jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas
+    image: jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:develop
     ports:
-      - "3333:3333"
+      - "3001:3001"
     restart: always
     networks:
       rede_microsservicos:

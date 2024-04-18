@@ -31,6 +31,7 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker build -t jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas .
+          docker tag jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:latest jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:prod
           docker tag jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:latest jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:develop
 
       - name: Log in to Docker Hub
@@ -39,7 +40,9 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:latest
+          docker push jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:prod
           docker push jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:develop
+          
 
       - name: Merge to prod (somente quando executado na branch develop)
         if: success() && github.ref == 'refs/heads/develop'
@@ -54,3 +57,8 @@ jobs:
           git checkout prod
           git merge --allow-unrelated-histories --strategy-option=theirs develop  # Merge forçado escolhendo automaticamente as alterações da branch develop
           git push origin prod  # Para enviar o merge para a branch prod no repositório remoto
+
+      - name: Some action (somente quando executado na branch prod)
+        if: success() && github.ref == 'refs/heads/prod'
+        run: |
+          # Coloque aqui os comandos que você deseja executar
