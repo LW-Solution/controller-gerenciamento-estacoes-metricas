@@ -34,13 +34,5 @@ services:
     depends_on:
       - mysql
 
-  typeorm-migration:
-    build: .
-    depends_on:
-      - mysql
-    command: npm run typeorm -- -d ./src/database/data-source.ts migration:run
-    networks:
-      - rede_microsservicos
-
 volumes:
   mysql-data:
