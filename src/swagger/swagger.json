@@ -63,6 +63,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IStationPost": {
+				"properties": {
+					"station_description": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string",
+						"format": "double"}
+				},
+				"required": [
+					"id_station",
+					"station_description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IUnit": {
 				"properties": {
 					"id_unit": {
@@ -207,6 +223,7 @@
 	"paths": {
 		"/alert": {
 			"get": {
+				"summary": "Retorna todos os alertas",
 				"operationId": "GetAllAlerts",
 				"responses": {
 					"200": {
@@ -227,6 +244,7 @@
 				"parameters": []
 			},
 			"post": {
+				"summary": "Cria um novo alerta",
 				"operationId": "CreateAlert",
 				"responses": {
 					"200": {
@@ -256,6 +274,7 @@
 		},
 		"/alert/{id}": {
 			"get": {
+				"summary": "Retorna um alerta por ID",
 				"operationId": "GetAlertById",
 				"responses": {
 					"200": {
@@ -283,6 +302,7 @@
 				]
 			},
 			"put": {
+				"summary": "Atualiza um alerta por ID",
 				"operationId": "UpdateAlert",
 				"responses": {
 					"200": {
@@ -325,6 +345,7 @@
 				}
 			},
 			"delete": {
+				"summary": "Deleta um alerta por ID",
 				"operationId": "DeleteAlert",
 				"responses": {
 					"200": {
@@ -359,6 +380,7 @@
 		},
 		"/locations": {
 			"get": {
+				"summary": "Retorna todas as localizações",
 				"operationId": "GetAllLocations",
 				"responses": {
 					"200": {
@@ -379,6 +401,7 @@
 				"parameters": []
 			},
 			"post": {
+				"summary": "Cria uma nova localização",
 				"operationId": "CreateLocation",
 				"responses": {
 					"200": {
@@ -408,6 +431,7 @@
 		},
 		"/locations/{id}": {
 			"get": {
+				"summary": "Retorna uma localização por ID",
 				"operationId": "GetLocationById",
 				"responses": {
 					"200": {
@@ -435,6 +459,7 @@
 				]
 			},
 			"put": {
+				"summary": "Atualiza uma localização por ID",
 				"operationId": "UpdateLocation",
 				"responses": {
 					"200": {
@@ -477,6 +502,7 @@
 				}
 			},
 			"delete": {
+				"summary": "Deleta uma localização por ID",
 				"operationId": "DeleteLocation",
 				"responses": {
 					"200": {
@@ -511,6 +537,7 @@
 		},
 		"/measure": {
 			"get": {
+				"summary": "Retorna todas as medidas",
 				"operationId": "GetAllMeasures",
 				"responses": {
 					"200": {
@@ -531,6 +558,7 @@
 				"parameters": []
 			},
 			"post": {
+				"summary": "Cria uma nova medida",
 				"operationId": "CreateMeasure",
 				"responses": {
 					"200": {
@@ -560,6 +588,7 @@
 		},
 		"/measure/{id}": {
 			"get": {
+				"summary": "Retorna uma medida por ID",
 				"operationId": "GetMeasureById",
 				"responses": {
 					"200": {
@@ -587,6 +616,7 @@
 				]
 			},
 			"put": {
+				"summary": "Atualiza uma medida por ID",
 				"operationId": "UpdateMeasure",
 				"responses": {
 					"200": {
@@ -629,6 +659,7 @@
 				}
 			},
 			"delete": {
+				"summary": "Deleta uma medida por ID",
 				"operationId": "DeleteMeasure",
 				"responses": {
 					"200": {
@@ -663,6 +694,7 @@
 		},
 		"/unit": {
 			"get": {
+				"summary": "Retorna todas as unidades",
 				"operationId": "GetAllUnits",
 				"responses": {
 					"200": {
@@ -683,6 +715,7 @@
 				"parameters": []
 			},
 			"post": {
+				"summary": "Cria uma nova unidade",
 				"operationId": "CreateUnit",
 				"responses": {
 					"200": {
@@ -712,6 +745,7 @@
 		},
 		"/unit/{id}": {
 			"get": {
+				"summary": "Retorna uma unidade por ID",
 				"operationId": "GetUnitById",
 				"responses": {
 					"200": {
@@ -739,6 +773,7 @@
 				]
 			},
 			"put": {
+				"summary": "Atualiza uma unidade por ID",
 				"operationId": "UpdateUnit",
 				"responses": {
 					"200": {
@@ -781,6 +816,7 @@
 				}
 			},
 			"delete": {
+				"summary": "Deleta uma unidade por ID",
 				"operationId": "DeleteUnit",
 				"responses": {
 					"200": {
@@ -811,6 +847,156 @@
 						}
 					}
 				]
+			}
+		},
+		"/station": {
+			"get": {
+				"summary": "Retorna todas as estações",
+				"operationId": "GetAllStations",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IStation"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"summary": "Cria uma nova estação",
+				"operationId": "CreateStation",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IStationPost"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IStation"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/station/{id}": {
+			"get": {
+				"summary": "Retorna uma estação por ID",
+				"operationId": "GetStationById",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IStation"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "Atualiza uma estação por ID",
+				"operationId": "UpdateStation",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IStationPost"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IStation"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta uma estação por ID",
+				"operationId": "DeleteStation",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IStation"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	},
