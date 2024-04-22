@@ -610,7 +610,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IMeasure"
+								"$ref": "#/components/schemas/IMeasurePost"
 							}
 						}
 					}
