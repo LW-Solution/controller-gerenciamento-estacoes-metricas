@@ -70,7 +70,8 @@
 					},
 					"location": {
 						"type": "string",
-						"format": "double"}
+						"format": "double"
+					}
 				},
 				"required": [
 					"id_station",
@@ -123,6 +124,32 @@
 					},
 					"Unit": {
 						"$ref": "#/components/schemas/IUnit"
+					}
+				},
+				"required": [
+					"factor",
+					"offset"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IParameterTypePost": {
+				"properties": {
+					"factor": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "object",
+						"properties": {
+							"id_unit": {
+								"type": "integer"
+							}
+						}
 					}
 				},
 				"required": [
@@ -998,11 +1025,168 @@
 					}
 				}
 			}
-		}
-	},
-	"servers": [
-		{
-			"url": "/"
-		}
-	]
+		},
+		"/parameterType": {
+			"get": {
+				"summary": "Retorna todos os tipos de parâmetros",
+				"operationId": "GetAllParameterTypes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IParameterType"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"summary": "Cria um novo tipo de parâmetro",
+				"operationId": "CreateParameterType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IParameterType"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParameterTypePost"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/parameterType/{id}": {
+			"get": {
+				"summary": "Retorna um tipo de parâmetro por ID",
+				"operationId": "GetParameterTypeById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IParameterType"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"summary": "Atualiza um tipo de parâmetro por ID",
+				"operationId": "UpdateParameterType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IParameterType"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParameterTypePost"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta um tipo de parâmetro por ID",
+				"operationId": "DeleteParameterType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IParameterType"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"servers": [
+			{
+				"url": "/"
+			}
+		]
+	}
 }
