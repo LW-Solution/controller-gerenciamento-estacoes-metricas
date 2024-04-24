@@ -182,6 +182,28 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IAlertPost": {
+				"properties": {
+					"condition": {
+						"type": "string"
+					},
+					"station_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"parameter_type_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"condition",
+					"station_id",
+					"parameter_type_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IMeasure": {
 				"properties": {
 					"id_measure": {
@@ -292,7 +314,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IAlert"
+								"$ref": "#/components/schemas/IAlertPost"
 							}
 						}
 					}
@@ -365,7 +387,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IAlert"
+								"$ref": "#/components/schemas/IAlertPost"
 							}
 						}
 					}
