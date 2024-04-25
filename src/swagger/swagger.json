@@ -7,12 +7,61 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"IOccurrence": {
+				"properties": {
+					"id_occurrence": {
+						"type": "number",
+						"format": "double"
+					},
+					"alert": {
+						"$ref": "#/components/schemas/IAlert"
+					},
+					"measure": {
+						"$ref": "#/components/schemas/IMeasure"
+					}
+				},
+				"required": ["id_occurrence", "alert", "measure"],
+				"type": "object",
+				"additionalProperties": false
+			},			
+			"IOccurrencePost": {
+				"properties": {
+				  "alertIdAlert": {
+					"type": "integer"
+				  },
+				  "measureIdMeasure": {
+					"type": "integer"
+				  }
+				},
+				"required": [
+				  "alertIdAlert",
+				  "measureIdMeasure"
+				],
+				"type": "object",
+				"additionalProperties": false
+			  },
 			"ILocation": {
 				"properties": {
 					"id_location": {
 						"type": "number",
 						"format": "double"
 					},
+					"location_name": {
+						"type": "string"
+					},
+					"coordinate": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"location_name",
+					"coordinate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILocationPost": {
+				"properties": {
 					"location_name": {
 						"type": "string"
 					},
@@ -47,12 +96,104 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IStationPost": {
+				"properties": {
+					"station_description": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id_station",
+					"station_description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IStationParameter": {
+				"properties": {
+					"id_station_parameter": {
+						"type": "number",
+						"format": "double"
+					},
+					"station": {
+						"$ref": "#/components/schemas/IStation"
+					},
+					"parameter_type": {
+						"$ref": "#/components/schemas/IParameterType"
+					}
+				},
+				"required": [
+					"id_station_parameter",
+					"station",
+					"parameter_type"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IStationParameterPost": {
+				"properties": {
+					"parameterTypeIdParameterType": {
+						"type": "object",
+						"properties": {
+							"id_parameter_type": {
+								"type": "integer"
+							}
+						}
+					},
+					"stationIdStation": {
+						"type": "object",
+						"properties": {
+							"id_station": {
+								"type": "integer"
+							}
+						}
+					}
+				},
+				"required": [
+					"parameterTypeIdParameterType",
+					"stationIdStation"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IStationParameterPut": {
+				"properties": {
+					"parameter_type_id": {
+						"type": "integer"
+					},
+					"station_id": {
+						"type": "integer"
+					}
+				},
+				"required": [
+					"parameter_type_id",
+					"station_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IUnit": {
 				"properties": {
 					"id_unit": {
 						"type": "number",
 						"format": "double"
 					},
+					"unit": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"unit"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUnitPost": {
+				"properties": {
 					"unit": {
 						"type": "string"
 					}
@@ -88,6 +229,32 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IParameterTypePost": {
+				"properties": {
+					"factor": {
+						"type": "number",
+						"format": "double"
+					},
+					"offset": {
+						"type": "number",
+						"format": "double"
+					},
+					"unit": {
+						"type": "object",
+						"properties": {
+							"id_unit": {
+								"type": "integer"
+							}
+						}
+					}
+				},
+				"required": [
+					"factor",
+					"offset"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IAlert": {
 				"properties": {
 					"id_alert": {
@@ -110,6 +277,81 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"IAlertPost": {
+				"properties": {
+					"condition": {
+						"type": "string"
+					},
+					"station_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"parameter_type_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"condition",
+					"station_id",
+					"parameter_type_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IMeasure": {
+				"properties": {
+					"id_measure": {
+						"format": "double",
+						"type": "number"
+					},
+					"value": {
+						"format": "double",
+						"type": "number"
+					},
+					"unixtime": {
+						"format": "double",
+						"type": "number"
+					},
+					"station_parameter_id": {
+						"$ref": "#/components/schemas/IStation"
+					}
+				},
+				"required": [
+					"value",
+					"unixtime",
+					"station_parameter_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IMeasurePost": {
+				"properties": {
+					"value": {
+						"format": "double",
+						"type": "number"
+					},
+					"unixtime": {
+						"format": "double",
+						"type": "number"
+					},
+					"station_parameter_id": {
+						"type": "object",
+						"properties": {
+							"station_parameter_id": {
+								"type": "integer"
+							}
+						}
+					}
+				},
+				"required": [
+					"value",
+					"unixtime",
+					"station_parameter_id"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -124,8 +366,290 @@
 		"contact": {}
 	},
 	"paths": {
+		"/occurrence": {
+			"get": {
+			  "summary": "Retorna todas as ocorrências",
+			  "responses": {
+				"200": {
+				  "description": "Ok",
+				  "schema": {
+					"$ref": "#/definitions/Occurrence"
+				  }
+				}
+			  }
+			},
+			"post": {
+				"summary": "Cria uma nova ocorrencia",
+				"operationId": "CreateOccurrence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/definitions/Occurrence"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IOccurrencePost"
+							}
+						}
+					}
+				}
+			}
+		  },
+		  "/occurrence/{id}": {
+			"get": {
+			  "summary": "Retorna uma ocorrência por ID",
+			  "parameters": [
+				{
+				  "in": "path",
+				  "name": "id",
+				  "description": "ID da ocorrência",
+				  "required": true,
+				  "type": "integer"
+				}
+			  ],
+			  "responses": {
+				"200": {
+				  "description": "Ok",
+				  "schema": {
+					"$ref": "#/definitions/Occurrence"
+				  }
+				},
+				"404": {
+				  "description": "Ocorrência não encontrada"
+				},
+				"500": {
+				  "description": "Erro do servidor interno"
+				}
+			  }
+			},
+			"put": {
+			  "summary": "Atualiza uma ocorrência por Id",
+			  "parameters": [
+				{
+				  "in": "path",
+				  "name": "id",
+				  "description": "ID da ocorrência",
+				  "required": true,
+				  "type": "integer"
+				},
+				{
+				  "in": "body",
+				  "name": "body",
+				  "description": "Ocorrência a ser atualizada",
+				  "required": true,
+				  "schema": {
+					"$ref": "#/components/schemas/IOccurrencePost"
+				  }
+				}
+			  ],
+			  "responses": {
+				"200": {
+				  "description": "Ok",
+				  "schema": {
+					"$ref": "#/definitions/Occurrence"
+				  }
+				},
+				"404": {
+				  "description": "Ocorrência não encontrada para atualização"
+				},
+				"500": {
+				  "description": "Erro ao atualizar ocorrência"
+				}
+			  }
+			},
+			"delete": {
+			  "summary": "Deletar uma ocorrência",
+			  "parameters": [
+				{
+				  "in": "path",
+				  "name": "id",
+				  "description": "ID da ocorrência",
+				  "required": true,
+				  "type": "integer"
+				}
+			  ],
+			  "responses": {
+				"204": {
+				  "description": "Ocorrência deletada"
+				},
+				"500": {
+				  "description": "Erro ao excluir ocorrência"
+				}
+			  }
+			}
+		  },
+		"/stationParameter": {
+			"get": {
+				"summary": "Retorna todos os parâmetros de estações",
+				"operationId": "GetAllStationParameters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IStationParameter"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"summary": "Cria um novo parâmetro de estação",
+				"operationId": "CreateStationParameter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IStationParameter"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IStationParameterPost"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/stationParameter/{id}": {
+			"get": {
+				"summary": "Retorna um parametro de estação por ID",
+				"operationId": "GetAlertStationParameterbyId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IStationParameter"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"summary": "Atualiza um parametro de estação por ID",
+				"operationId": "UpdateStationParameter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IStationParameter"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IStationParameterPut"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta um parametro de estação por ID",
+				"operationId": "DeleteStationParameter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IStationParameter"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/alert": {
 			"get": {
+				"summary": "Retorna todos os alertas",
 				"operationId": "GetAllAlerts",
 				"responses": {
 					"200": {
@@ -146,6 +670,7 @@
 				"parameters": []
 			},
 			"post": {
+				"summary": "Cria um novo alerta",
 				"operationId": "CreateAlert",
 				"responses": {
 					"200": {
@@ -166,7 +691,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IAlert"
+								"$ref": "#/components/schemas/IAlertPost"
 							}
 						}
 					}
@@ -175,6 +700,7 @@
 		},
 		"/alert/{id}": {
 			"get": {
+				"summary": "Retorna um alerta por ID",
 				"operationId": "GetAlertById",
 				"responses": {
 					"200": {
@@ -202,6 +728,7 @@
 				]
 			},
 			"put": {
+				"summary": "Atualiza um alerta por ID",
 				"operationId": "UpdateAlert",
 				"responses": {
 					"200": {
@@ -237,13 +764,14 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IAlert"
+								"$ref": "#/components/schemas/IAlertPost"
 							}
 						}
 					}
 				}
 			},
 			"delete": {
+				"summary": "Deleta um alerta por ID",
 				"operationId": "DeleteAlert",
 				"responses": {
 					"200": {
@@ -275,11 +803,789 @@
 					}
 				]
 			}
-		}
-	},
-	"servers": [
-		{
-			"url": "/"
-		}
-	]
+		},
+		"/locations": {
+			"get": {
+				"summary": "Retorna todas as localizações",
+				"operationId": "GetAllLocations",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ILocation"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"summary": "Cria uma nova localização",
+				"operationId": "CreateLocation",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ILocation"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILocationPost"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/locations/{id}": {
+			"get": {
+				"summary": "Retorna uma localização por ID",
+				"operationId": "GetLocationById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ILocation"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"summary": "Atualiza uma localização por ID",
+				"operationId": "UpdateLocation",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/ILocation"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILocationPost"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta uma localização por ID",
+				"operationId": "DeleteLocation",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/ILocation"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/measure": {
+			"get": {
+				"summary": "Retorna todas as medidas",
+				"operationId": "GetAllMeasures",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IMeasure"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"summary": "Cria uma nova medida",
+				"operationId": "CreateMeasure",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IMeasure"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IMeasurePost"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/measure/{id}": {
+			"get": {
+				"summary": "Retorna uma medida por ID",
+				"operationId": "GetMeasureById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IMeasure"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"summary": "Atualiza uma medida por ID",
+				"operationId": "UpdateMeasure",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IMeasure"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IMeasurePost"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta uma medida por ID",
+				"operationId": "DeleteMeasure",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IMeasure"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/unit": {
+			"get": {
+				"summary": "Retorna todas as unidades",
+				"operationId": "GetAllUnits",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IUnit"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"summary": "Cria uma nova unidade",
+				"operationId": "CreateUnit",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IUnit"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUnitPost"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/unit/{id}": {
+			"get": {
+				"summary": "Retorna uma unidade por ID",
+				"operationId": "GetUnitById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IUnit"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"summary": "Atualiza uma unidade por ID",
+				"operationId": "UpdateUnit",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IUnit"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUnitPost"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta uma unidade por ID",
+				"operationId": "DeleteUnit",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IUnit"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/station": {
+			"get": {
+				"summary": "Retorna todas as estações",
+				"operationId": "GetAllStations",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IStation"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"summary": "Cria uma nova estação",
+				"operationId": "CreateStation",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IStationPost"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IStation"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/station/{id}": {
+			"get": {
+				"summary": "Retorna uma estação por ID",
+				"operationId": "GetStationById",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IStation"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "Atualiza uma estação por ID",
+				"operationId": "UpdateStation",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IStationPost"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IStation"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta uma estação por ID",
+				"operationId": "DeleteStation",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IStation"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/parameterType": {
+			"get": {
+				"summary": "Retorna todos os tipos de parâmetros",
+				"operationId": "GetAllParameterTypes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/IParameterType"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"summary": "Cria um novo tipo de parâmetro",
+				"operationId": "CreateParameterType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IParameterType"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParameterTypePost"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/parameterType/{id}": {
+			"get": {
+				"summary": "Retorna um tipo de parâmetro por ID",
+				"operationId": "GetParameterTypeById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IParameterType"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"summary": "Atualiza um tipo de parâmetro por ID",
+				"operationId": "UpdateParameterType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IParameterType"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParameterTypePost"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Deleta um tipo de parâmetro por ID",
+				"operationId": "DeleteParameterType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/IParameterType"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"servers": [
+			{
+				"url": "/"
+			}
+		]
+	}
 }

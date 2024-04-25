@@ -25,7 +25,7 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
     }
   });
 
-  locationRouter.post("/create", async (req: Request, res: Response) => {
+  locationRouter.post("/", async (req: Request, res: Response) => {
     const newStationParameter = {...req.body}
 
     try{
