@@ -7,6 +7,39 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"IOccurrence": {
+				"properties": {
+					"id_occurrence": {
+						"type": "number",
+						"format": "double"
+					},
+					"alert": {
+						"$ref": "#/components/schemas/IAlert"
+					},
+					"measure": {
+						"$ref": "#/components/schemas/IMeasure"
+					}
+				},
+				"required": ["id_occurrence", "alert", "measure"],
+				"type": "object",
+				"additionalProperties": false
+			},			
+			"IOccurrencePost": {
+				"properties": {
+				  "alertIdAlert": {
+					"type": "integer"
+				  },
+				  "measureIdMeasure": {
+					"type": "integer"
+				  }
+				},
+				"required": [
+				  "alertIdAlert",
+				  "measureIdMeasure"
+				],
+				"type": "object",
+				"additionalProperties": false
+			  },
 			"ILocation": {
 				"properties": {
 					"id_location": {
@@ -333,6 +366,130 @@
 		"contact": {}
 	},
 	"paths": {
+		"/occurrence": {
+			"get": {
+			  "summary": "Retorna todas as ocorrências",
+			  "responses": {
+				"200": {
+				  "description": "Ok",
+				  "schema": {
+					"$ref": "#/definitions/Occurrence"
+				  }
+				}
+			  }
+			},
+			"post": {
+				"summary": "Cria uma nova ocorrencia",
+				"operationId": "CreateOccurrence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/definitions/Occurrence"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IOccurrencePost"
+							}
+						}
+					}
+				}
+			}
+		  },
+		  "/occurrence/{id}": {
+			"get": {
+			  "summary": "Retorna uma ocorrência por ID",
+			  "parameters": [
+				{
+				  "in": "path",
+				  "name": "id",
+				  "description": "ID da ocorrência",
+				  "required": true,
+				  "type": "integer"
+				}
+			  ],
+			  "responses": {
+				"200": {
+				  "description": "Ok",
+				  "schema": {
+					"$ref": "#/definitions/Occurrence"
+				  }
+				},
+				"404": {
+				  "description": "Ocorrência não encontrada"
+				},
+				"500": {
+				  "description": "Erro do servidor interno"
+				}
+			  }
+			},
+			"put": {
+			  "summary": "Atualiza uma ocorrência por Id",
+			  "parameters": [
+				{
+				  "in": "path",
+				  "name": "id",
+				  "description": "ID da ocorrência",
+				  "required": true,
+				  "type": "integer"
+				},
+				{
+				  "in": "body",
+				  "name": "body",
+				  "description": "Ocorrência a ser atualizada",
+				  "required": true,
+				  "schema": {
+					"$ref": "#/components/schemas/IOccurrencePost"
+				  }
+				}
+			  ],
+			  "responses": {
+				"200": {
+				  "description": "Ok",
+				  "schema": {
+					"$ref": "#/definitions/Occurrence"
+				  }
+				},
+				"404": {
+				  "description": "Ocorrência não encontrada para atualização"
+				},
+				"500": {
+				  "description": "Erro ao atualizar ocorrência"
+				}
+			  }
+			},
+			"delete": {
+			  "summary": "Deletar uma ocorrência",
+			  "parameters": [
+				{
+				  "in": "path",
+				  "name": "id",
+				  "description": "ID da ocorrência",
+				  "required": true,
+				  "type": "integer"
+				}
+			  ],
+			  "responses": {
+				"204": {
+				  "description": "Ocorrência deletada"
+				},
+				"500": {
+				  "description": "Erro ao excluir ocorrência"
+				}
+			  }
+			}
+		  },
 		"/stationParameter": {
 			"get": {
 				"summary": "Retorna todos os parâmetros de estações",
