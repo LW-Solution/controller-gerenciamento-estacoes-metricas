@@ -28,6 +28,7 @@ import { FKStationToAlert1712752806179 } from "./migrations/1712752806179-FK-Sta
 import { FKParameterTypeToAlert1712752842633 } from "./migrations/1712752842633-FK-ParameterTypeToAlert"
 import { FKMeasureToOccurrence1712753201130 } from "./migrations/1712753201130-FK-MeasureToOccurrence"
 import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-AlertToOccurrence"
+import { AdicionandoColunaParameterType1714325746698 } from "./migrations/1714325746698-AdicionandoColunaParameterType"
 
 const envFile = process.env.NODE_ENV == 'production' ? '.env.prod' : '.env.dev';
 
@@ -63,8 +64,8 @@ export const AppDataSource = new DataSource({
         FKStationToAlert1712752806179,
         FKParameterTypeToAlert1712752842633,
         FKMeasureToOccurrence1712753201130,
-        FKAlertToOccurrence1712753259171
-
+        FKAlertToOccurrence1712753259171,
+        AdicionandoColunaParameterType1714325746698,
     ],
     
     subscribers: [],

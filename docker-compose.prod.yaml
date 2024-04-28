@@ -16,7 +16,7 @@ services:
       MYSQL_USER: username
       MYSQL_PASSWORD: password
     ports:
-      - "3306:3306"
+      - "3307:3307"
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -24,7 +24,7 @@ services:
         ipv4_address: 172.18.0.5
 
   controller-gerenciamento-estacoes-metricas:
-    image: jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas
+    image: jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:prod
     ports:
       - "3333:3333"
     restart: always
