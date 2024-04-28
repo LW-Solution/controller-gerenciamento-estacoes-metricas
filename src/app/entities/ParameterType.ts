@@ -10,6 +10,9 @@ export default class ParameterType implements IParameterType {
     id_parameter_type: number;
 
     @Column()
+    description: string;
+
+    @Column()
     factor: number;
 
     @Column()

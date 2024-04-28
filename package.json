@@ -10,7 +10,8 @@
       "start:prod": "cross-env NODE_ENV=production && npm run migration && ts-node-dev src/server.ts",
       "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
       "generate:docs": "tsoa spec-and-routes",
-      "migration": "npm run typeorm -- -d ./src/database/data-source.ts migration:run"
+      "migration": "npm run typeorm -- -d ./src/database/data-source.ts migration:run",
+      "teste": "typeorm migration:generate -n teste"
    },
    "keywords": [],
    "author": "",
