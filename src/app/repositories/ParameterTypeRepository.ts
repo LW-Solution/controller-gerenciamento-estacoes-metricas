@@ -17,6 +17,7 @@ const getParameterTypes = async (): Promise<IParameterType[]> => {
     description: parameterType.description,
     factor: parameterType.factor,
     offset: parameterType.offset,
+    parameter_name: parameterType.parameter_name,
   }));
 };
 
@@ -36,6 +37,7 @@ const getParameterTypeById = async (id: number): Promise<IParameterType | undefi
     description: parameterType.description,
     factor: parameterType.factor,
     offset: parameterType.offset,
+    parameter_name: parameterType.parameter_name
   } as IParameterType;
 
   return parameterTypeData;
@@ -67,7 +69,8 @@ const createParameterType = async (parameterType: ParameterType): Promise<IParam
   return newParameterType;
 };
 
-const updateParameterType = async (id: number, unitIdUnit: number | undefined, description: string | undefined, factor: number | undefined, offset: number | undefined): Promise<IParameterType | undefined> => {
+const updateParameterType = async (id: number, unitIdUnit: number | undefined, description: string | undefined, factor: number | undefined, parameter_name: string | undefined ,offset: number | undefined): Promise<IParameterType | undefined> => {
+
   try {
     const existingParameterType = await parameterTypeRepository.findOne({
       where: { id_parameter_type: id },
@@ -103,6 +106,10 @@ const updateParameterType = async (id: number, unitIdUnit: number | undefined, d
 
     if (offset !== undefined) {
       existingParameterType.offset = offset;
+    }
+
+    if (parameter_name !== undefined) {
+      existingParameterType.parameter_name = parameter_name;
     }
 
     const updatedParameterType = await parameterTypeRepository.save(existingParameterType);
