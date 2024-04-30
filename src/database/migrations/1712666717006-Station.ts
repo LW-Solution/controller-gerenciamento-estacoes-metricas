@@ -23,6 +23,11 @@ export class CreateUserTable1712666717006 implements MigrationInterface {
                         type: 'int',
                         isNullable: false,
                     },
+                    {
+                        name: 'uuid',
+                        type: 'int',
+                        isNullable: true,
+                    },
                 ],
             }),
         );
