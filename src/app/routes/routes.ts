@@ -7,6 +7,7 @@ import StationParameterRouter from "../controllers/StationParameterController";
 import unitRouter from "../controllers/UnitController";
 import occurrenceRouter from "../controllers/OccurrenceController";
 import measureRouter from "../controllers/MeasureController";
+import recepcaoRouter from "../controllers/RecepcaoController";
 
 const routers = Router();
 
@@ -33,6 +34,9 @@ routers.use('/occurrence', occurrenceRouter)
 
 //Medidas
 routers.use('/measure', measureRouter)
+
+//Recepção de dados iot
+routers.use('/recepcao', recepcaoRouter)
 
 export default routers;
 
