@@ -25,6 +25,10 @@ export class CreateParameterTypeTable1712670126244 implements MigrationInterface
                         name: 'offset',
                         type: 'float',
                     },
+                    {
+                        name: 'parameter_name',
+                        type: 'varchar',
+                    },
                 ],
             }),
         );

@@ -18,6 +18,9 @@ export default class ParameterType implements IParameterType {
     @Column()
     offset: number;
 
+    @Column()
+    parameter_name: string;
+
     @ManyToOne(() => Unit, unit => unit.parameterTypes)
     unit: Unit;
 
