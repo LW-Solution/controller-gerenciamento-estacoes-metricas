@@ -24,11 +24,15 @@ const getStationById = async (id: number): Promise<IStation | undefined> => {
 
 
 const createStation = async (station: Station): Promise<IStation> => {
-    const newStation = await stationRepository.create(station);
-    stationRepository.save(newStation)
-    return newStation;
+  try {
+      const newStation = await stationRepository.create(station);
+      await stationRepository.save(newStation);
+      return newStation;
+  } catch (error) {
+      console.error('Error creating station:', error);
+      throw error;
+  }
 }
-
 const updateStation = async (id: number, station_description: string, locationIdLocation: number | undefined): Promise<IStation | undefined> => {
     try {
       const existingStation = await stationRepository.findOne({
