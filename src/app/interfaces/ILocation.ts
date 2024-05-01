@@ -1,7 +1,8 @@
- interface ILocation {
+interface ILocation {
     id_location?: number;
     location_name: string;
-    coordinate: string;
+    latitude: string;
+    longitude: string;
 }
 
 export default ILocation;

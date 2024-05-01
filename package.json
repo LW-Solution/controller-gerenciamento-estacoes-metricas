@@ -6,6 +6,7 @@
    "type": "commonjs",
    "scripts": {
       "build": "tsc",
+      "start": "cross-env NODE_ENV=development && npm run migration && ts-node-dev src/server.ts",
       "start:dev": "cross-env NODE_ENV=development && npm run migration && ts-node-dev src/server.ts",
       "start:prod": "cross-env NODE_ENV=production && npm run migration && ts-node-dev src/server.ts",
       "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",

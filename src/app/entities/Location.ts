@@ -10,7 +10,10 @@ export default class Location  {
     location_name: string;
 
     @Column()
-    coordinate: string;
+    latitude: string;
+
+    @Column()
+    longitude: string;
 
     @OneToMany(() => Station, station => station.location)
     stations: Station[];
