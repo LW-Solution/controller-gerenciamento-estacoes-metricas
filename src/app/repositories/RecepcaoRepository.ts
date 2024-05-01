@@ -17,6 +17,16 @@ async function saveData(jsonArray: any[]): Promise<void> {
             throw new Error(`Station with description ${json.station_description} not found`);
         }
 
+        if (station.uuid === null || station.uuid !== json.uuid) {
+            if (station.uuid === null) {
+                station.uuid = json.uuid;
+                await stationRepository.save(station);
+            } if (station.uuid !== json.uuid) {
+                throw new Error(`UUID for station ${json.station_description} does not match the provided UUID`);
+            }
+        }
+
+
         for (const param of Object.entries(json.parametros[0])) {
             const parameterType = await parameterTypeRepository.findOne({ where: { parameter_name: param[0] } });
 
