@@ -41,7 +41,7 @@ parameterTypeRouter.get("/:id", async (req: Request, res: Response) => {
     const { unitIdUnit, factor, description, parameter_name, offset } = req.body;
   
     try {
-      const updatedParameterType = await updateParameterType(parseInt(id, 10), unitIdUnit, factor, offset, description, parameter_name);
+      const updatedParameterType = await updateParameterType(parseInt(id, 10), unitIdUnit, description, factor, parameter_name, offset);
       if (!updatedParameterType) {
         return res.status(404).json({ message: "Parâmetro do Tipo Parâmetro não encontrado para atualização" });
       }

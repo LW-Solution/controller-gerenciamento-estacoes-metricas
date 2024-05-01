@@ -1,7 +1,6 @@
 import { AppDataSource } from "../../database/data-source";
 import ParameterType from "../entities/ParameterType";
 import IParameterType from "../interfaces/IParameterType";
-import IUnit from "../interfaces/IUnit";
 import unitRepository from "./UnitRepository";
 
 const parameterTypeRepository = AppDataSource.getRepository(ParameterType);
@@ -70,7 +69,6 @@ const createParameterType = async (parameterType: ParameterType): Promise<IParam
 };
 
 const updateParameterType = async (id: number, unitIdUnit: number | undefined, description: string | undefined, factor: number | undefined, parameter_name: string | undefined ,offset: number | undefined): Promise<IParameterType | undefined> => {
-
   try {
     const existingParameterType = await parameterTypeRepository.findOne({
       where: { id_parameter_type: id },
