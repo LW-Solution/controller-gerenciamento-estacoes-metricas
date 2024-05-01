@@ -8,7 +8,7 @@ export default class Station  {
     @PrimaryGeneratedColumn()
     id_station: number;
 
-    @Column()
+    @Column({ unique: true })
     station_description: string;
 
     @ManyToOne(() => Location, location => location.stations)

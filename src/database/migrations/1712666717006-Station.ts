@@ -17,6 +17,7 @@ export class CreateUserTable1712666717006 implements MigrationInterface {
                         name: 'station_description',
                         type: 'varchar',
                         isNullable: false,
+                        isUnique: true,
                     },
                     {
                         name: 'location_id',

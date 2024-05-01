@@ -28,6 +28,7 @@ export class CreateParameterTypeTable1712670126244 implements MigrationInterface
                     {
                         name: 'parameter_name',
                         type: 'varchar',
+                        isUnique: true,
                     },
                 ],
             }),
