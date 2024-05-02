@@ -37,18 +37,18 @@ stationParameterRouter.get("/:id", async (req: Request, res: Response) => {
 
 
 stationParameterRouter.post("/", async (req: Request, res: Response) => {
-    const { parameterTypeIdParameterType, stationIdStation } = req.body;
-  
+    const { parameter_type:{id_parameter_type}, station:{id_station} } = req.body;
+
     const newStationParameter: IStationParameter = {
       station_parameter_id: 0, // Pode ser 0 se for gerado automaticamente pelo banco de dados
       parameter_type_id: {
-        id_parameter_type: parameterTypeIdParameterType?.id_parameter_type
+        id_parameter_type: id_parameter_type
       },
       station_id: {
-        id_station: stationIdStation?.id_station
+        id_station: id_station
       }
     };
-  
+
     try {
       const createdStationParameter = await createStationParameter(newStationParameter);
       return res.status(200).json(createdStationParameter);
@@ -58,12 +58,13 @@ stationParameterRouter.post("/", async (req: Request, res: Response) => {
   });
   
 
-  stationParameterRouter.put("/:id", async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { parameter_type_id, station_id } = req.body;
+  stationParameterRouter.put("/:stationParameterId", async (req: Request, res: Response) => {
+    const { stationParameterId } = req.params;
+    
+    const { parameter_type:{id_parameter_type}, station:{id_station} } = req.body;
   
     try {
-      const result = await updateStationParameter(parseInt(id, 10), parameter_type_id, station_id);
+      const result = await updateStationParameter(parseInt(stationParameterId, 10), id_parameter_type, id_station);
       if (!result) {
         return res.status(404).json({ message: "Parâmetro de estação não encontrado para atualização" });
       }

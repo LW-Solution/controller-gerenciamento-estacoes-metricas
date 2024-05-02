@@ -38,12 +38,13 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
 
 locationRouter.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { location_name, coordinate } = req.body;
+  const { location_name, latitude, longitude } = req.body;
 
   try {
     const updatedLocation = await updateLocation(parseInt(id), {
       location_name,
-      coordinate,
+      latitude,
+      longitude
     });
 
     if (!updatedLocation) {

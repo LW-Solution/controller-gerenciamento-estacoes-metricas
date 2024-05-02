@@ -8,6 +8,7 @@ import unitRouter from "../controllers/UnitController";
 import occurrenceRouter from "../controllers/OccurrenceController";
 import measureRouter from "../controllers/MeasureController";
 import recepcaoRouter from "../controllers/RecepcaoController";
+import dashBoardRouter from "../controllers/DashBoardController";
 
 const routers = Router();
 
@@ -37,6 +38,9 @@ routers.use('/measure', measureRouter)
 
 //Recepção de dados iot
 routers.use('/recepcao', recepcaoRouter)
+
+//Dashboard
+routers.use('/dashboard', dashBoardRouter)
 
 export default routers;
 
