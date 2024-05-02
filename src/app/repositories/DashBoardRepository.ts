@@ -20,5 +20,5 @@ const getDahsBoardData = async (id: number): Promise<IStationParameter[]> => {
     return dashBoardList;
   };
 
-
+export { getDahsBoardData };
 export default dashBoardRepository;

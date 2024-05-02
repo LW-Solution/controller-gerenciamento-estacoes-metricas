@@ -7,6 +7,7 @@ import StationParameterRouter from "../controllers/StationParameterController";
 import unitRouter from "../controllers/UnitController";
 import occurrenceRouter from "../controllers/OccurrenceController";
 import measureRouter from "../controllers/MeasureController";
+import dashBoardRouter from "../controllers/DashBoardController";
 
 const routers = Router();
 
@@ -33,6 +34,9 @@ routers.use('/occurrence', occurrenceRouter)
 
 //Medidas
 routers.use('/measure', measureRouter)
+
+//Dashboard
+routers.use('/dashboard', dashBoardRouter)
 
 export default routers;
 
