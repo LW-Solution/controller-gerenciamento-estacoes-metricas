@@ -2,7 +2,6 @@ import { JsonObject } from "swagger-ui-express";
 import { AppDataSource } from "../../database/data-source";
 import Measure from "../entities/Measure";
 import StationParameter from "../entities/StationParameter";
-import IMeasure from "../interfaces/IMeasure";
 import IStationParameter from "../interfaces/IStationParameter";
 
 
