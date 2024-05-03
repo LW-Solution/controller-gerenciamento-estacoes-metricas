@@ -11,6 +11,9 @@ export default class Alert {
     @Column()
     condition: string;
 
+    @Column()
+    description: string;
+
     @ManyToOne(() => Station, station => station.alerts)
     station: Station;
 
