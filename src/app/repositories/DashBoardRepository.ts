@@ -1,19 +1,25 @@
 import { JsonObject } from "swagger-ui-express";
 import { AppDataSource } from "../../database/data-source";
-import Measure from "../entities/Measure";
 import StationParameter from "../entities/StationParameter";
 import IStationParameter from "../interfaces/IStationParameter";
+import Station from "../entities/Station";
+import IStation from "../interfaces/IStation";
 
 
 const stationParameter = AppDataSource.getRepository(StationParameter);
-const dashBoardRepository = AppDataSource.getRepository(Measure);
+const dashBoardRepository = AppDataSource.getRepository(Station);
 
-const getDahsBoardData = async (id: number): Promise<IStationParameter[]> => {
+const getDahsBoardData = async (id: number): Promise<IStation[]> => {
   const dashBoardList = await stationParameter.find({
     relations: ["station", "parameter_type", "measures"],
   });
 
-  return dashBoardList;
+  const test = await dashBoardRepository.find({
+    relations: ["location"],
+    where: { id_station: id },
+  });
+
+  return test;
 };
 
 const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): Promise<JsonObject> => {
@@ -32,13 +38,18 @@ const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): P
     }
   });
 
-  const formattedData: {[key: string]: string | null} = {
-        ano: String(date.getFullYear()),
-        mes: String(date.getMonth() + 1), // Os meses são indexados de 0 a 11
-        data: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
-        hora: `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`,
-        id_estacao: id_station.toString(),
-    };
+  const station = await dashBoardRepository.find({
+    relations: ["location"],
+    where: { id_station: id_station },
+  });
+
+  const formattedData: {[key: string]: string | any} = {
+    ano: String(date.getFullYear()),
+    mes: String(date.getMonth() + 1), // Os meses são indexados de 0 a 11
+    data: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
+    hora: `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`,
+    id_estacao: station[0],
+  };
 
   // Mapeia os parâmetros e seus valores
   dashBoardList.forEach((item) => {
@@ -51,4 +62,4 @@ const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): P
 };
 
 export { getDahsBoardData, getDahsBoardDataUnixTime };
-export default dashBoardRepository;
+export default stationParameter;
