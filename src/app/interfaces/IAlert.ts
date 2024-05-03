@@ -4,6 +4,7 @@ import IStation from "./IStation";
 interface IAlert {
     id_alert: number;
     condition: string;
+    description: string;
     station_id?: IStation;
     parameter_type_id?: IParameterType;
 }
