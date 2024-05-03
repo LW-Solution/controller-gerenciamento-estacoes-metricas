@@ -38,7 +38,7 @@ stationParameterRouter.get("/:id", async (req: Request, res: Response) => {
 
 stationParameterRouter.post("/", async (req: Request, res: Response) => {
     const { parameter_type:{id_parameter_type}, station:{id_station} } = req.body;
-
+    
     const newStationParameter: IStationParameter = {
       station_parameter_id: 0, // Pode ser 0 se for gerado automaticamente pelo banco de dados
       parameter_type_id: {

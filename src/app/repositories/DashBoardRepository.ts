@@ -4,10 +4,13 @@ import StationParameter from "../entities/StationParameter";
 import IStationParameter from "../interfaces/IStationParameter";
 import Station from "../entities/Station";
 import IStation from "../interfaces/IStation";
+import ParameterType from "../entities/ParameterType";
+import { In } from "typeorm";
 
 
 const stationParameter = AppDataSource.getRepository(StationParameter);
 const dashBoardRepository = AppDataSource.getRepository(Station);
+const parameterTypeRepository = AppDataSource.getRepository(ParameterType);
 
 const getDahsBoardData = async (id: number): Promise<IStation[]> => {
   const dashBoardList = await stationParameter.find({
@@ -43,9 +46,20 @@ const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): P
     where: { id_station: id_station },
   });
 
-  const formattedData: {[key: string]: string | any} = {
+  // Extrai os IDs dos tipos de parâmetros
+  const parameterTypeIds = dashBoardList.map(item => item.parameter_type.id_parameter_type);
+
+  // Consulta os tipos de parâmetros com base nos IDs extraídos
+  const parameterTypes = await parameterTypeRepository.find({
+    relations: ["unit"],
+    where: {
+      id_parameter_type: In(parameterTypeIds)
+    }
+  });
+
+  const formattedData: { [key: string]: string | any } = {
     ano: String(date.getFullYear()),
-    mes: String(date.getMonth() + 1), // Os meses são indexados de 0 a 11
+    mes: String(date.getMonth() + 1),
     data: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
     hora: `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`,
     id_estacao: station[0],
@@ -54,12 +68,20 @@ const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): P
   // Mapeia os parâmetros e seus valores
   dashBoardList.forEach((item) => {
     const paramName = item.parameter_type.description;
-    const paramValue = (item.measures.length > 0) ? `${item.measures[0].value * item.parameter_type.factor + item.parameter_type.offset}` : null;
-    formattedData[paramName] = paramValue;
+    const paramValue = item.measures[0].value;
+    const parameterType = parameterTypes.find(type => type.id_parameter_type === item.parameter_type.id_parameter_type);
+    const paramInfo = {
+      value: paramValue,
+      parameterType: parameterType
+    };
+
+    formattedData[paramName] = paramInfo;
   });
 
   return formattedData;
 };
+
+
 
 export { getDahsBoardData, getDahsBoardDataUnixTime };
 export default stationParameter;
