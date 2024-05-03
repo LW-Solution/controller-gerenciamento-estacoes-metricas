@@ -21,5 +21,5 @@ export default class Station  {
     alerts: Alert[];
 
     @Column({ nullable: true })
-    uuid: number;
+    uuid: string;
 }
