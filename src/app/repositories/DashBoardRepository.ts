@@ -12,18 +12,67 @@ const stationParameter = AppDataSource.getRepository(StationParameter);
 const dashBoardRepository = AppDataSource.getRepository(Station);
 const parameterTypeRepository = AppDataSource.getRepository(ParameterType);
 
-const getDahsBoardData = async (id: number): Promise<IStation[]> => {
+const getDahsBoardData = async (id: number): Promise<JsonObject> => {
   const dashBoardList = await stationParameter.find({
     relations: ["station", "parameter_type", "measures"],
+    where: {
+      station: {
+        id_station: id
+      },
+    }
   });
 
-  const test = await dashBoardRepository.find({
+  const station = await dashBoardRepository.find({
     relations: ["location"],
     where: { id_station: id },
   });
 
-  return test;
+  // Extrai os IDs dos tipos de parâmetros
+  const parameterTypeIds = dashBoardList.map(item => item.parameter_type.id_parameter_type);
+
+  // Consulta os tipos de parâmetros com base nos IDs extraídos
+  const parameterTypes = await parameterTypeRepository.find({
+    relations: ["unit"],
+    where: {
+      id_parameter_type: In(parameterTypeIds)
+    }
+  });
+
+  const formattedData: { [key: string]: any } = {
+    id_estacao: station[0],
+    measurements: []
+  };
+
+  // Mapeia os parâmetros e suas medições
+  for (const item of dashBoardList) {
+    const paramName = item.parameter_type.description;
+    const parameterType = await parameterTypes.find(type => type.id_parameter_type === item.parameter_type.id_parameter_type);
+    
+    // Itera sobre cada medida
+    for (const measure of item.measures) {
+      const paramValue = measure.value;
+  
+      // Obtém a data da medição
+      const measureDate = new Date(measure.unixtime * 1000); // Converte o UnixTime em milissegundos
+      const measureDateString = `${measureDate.getFullYear()}-${String(measureDate.getMonth() + 1).padStart(2, '0')}-${String(measureDate.getDate()).padStart(2, '0')}`;
+      const measureTimeString = `${String(measureDate.getHours()).padStart(2, '0')}:${String(measureDate.getMinutes()).padStart(2, '0')}:${String(measureDate.getSeconds()).padStart(2, '0')}`;
+  
+      const measurement = {
+        description: paramName,
+        value: paramValue,
+        parameter_type: parameterType,
+        data: measureDateString,
+        hora: measureTimeString
+      };
+  
+      formattedData.measurements.push(measurement);
+    }
+  }
+  
+
+  return formattedData;
 };
+
 
 const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): Promise<JsonObject> => {
 
