@@ -26,7 +26,7 @@ export class CreateUserTable1712666717006 implements MigrationInterface {
                     },
                     {
                         name: 'uuid',
-                        type: 'int',
+                        type: 'varchar',
                         isNullable: true,
                     },
                 ],
