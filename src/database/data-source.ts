@@ -30,6 +30,7 @@ import { FKMeasureToOccurrence1712753201130 } from "./migrations/1712753201130-F
 import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-AlertToOccurrence"
 import { AdicionandoColunaParameterType1714325746698 } from "./migrations/1714325746698-AdicionandoColunaParameterType"
 import { AlteracaoCoordenadasParaLatidutitudeLongitude1714586269833 } from "./migrations/1714586269833-AlteracaoCoordenadasParaLatidutitudeLongitude";
+import { CreateColumnDescriptionOnAlert1714752950931 } from "./migrations/1714752950931-CreateColumnDescriptionOnAlert";
 
 const envFile = process.env.NODE_ENV == 'production' ? '.env.prod' : '.env.dev';
 
@@ -67,7 +68,8 @@ export const AppDataSource = new DataSource({
         FKMeasureToOccurrence1712753201130,
         FKAlertToOccurrence1712753259171,
         AdicionandoColunaParameterType1714325746698,
-        AlteracaoCoordenadasParaLatidutitudeLongitude1714586269833
+        AlteracaoCoordenadasParaLatidutitudeLongitude1714586269833,
+        CreateColumnDescriptionOnAlert1714752950931
     ],
     
     subscribers: [],
