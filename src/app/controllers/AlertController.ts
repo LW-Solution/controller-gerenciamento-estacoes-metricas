@@ -29,12 +29,13 @@ alertRouter.get("/:id", async (req: Request, res: Response) => {
 })
 
 alertRouter.post("/", async (req: Request, res: Response) => {
-    const { condition, station_id, parameter_type_id , description} = req.body;
+    const { condition, station_id, parameter_type_id , description, value} = req.body;
   
     const newAlert: IAlert = {
       id_alert: 0, // Pode ser 0 se for gerado automaticamente pelo banco de dados
       description,
       condition,
+      value,
       station_id: station_id,
       parameter_type_id: parameter_type_id
     };

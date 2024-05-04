@@ -3,6 +3,8 @@ import Measure from "../entities/Measure";
 import Station from "../entities/Station";
 import StationParameter from "../entities/StationParameter";
 import ParameterType from "../entities/ParameterType";
+import { ativacaoAlert } from "../scripts/ativacaoAlerta";
+
 
 async function saveData(jsonArray: any[]): Promise<void> {
     const measureRepository = AppDataSource.getTreeRepository(Measure);
@@ -25,6 +27,7 @@ async function saveData(jsonArray: any[]): Promise<void> {
                 throw new Error(`UUID for station ${json.station_description} does not match the provided UUID`);
             }
         }
+
 
 
         for (const param of Object.entries(json.parametros[0])) {
@@ -55,7 +58,7 @@ async function saveData(jsonArray: any[]): Promise<void> {
             }
 
             measure.station_parameter = stationParameter;
-            await measureRepository.save(measure);
+            await measureRepository.save(measure).then(() => ativacaoAlert(measure));
         }
     }
 }

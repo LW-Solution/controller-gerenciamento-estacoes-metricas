@@ -5,6 +5,7 @@ interface IAlert {
     id_alert: number;
     condition: string;
     description: string;
+    value: number;
     station_id?: IStation;
     parameter_type_id?: IParameterType;
 }
