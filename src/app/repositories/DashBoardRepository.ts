@@ -5,7 +5,7 @@ import IStationParameter from "../interfaces/IStationParameter";
 import Station from "../entities/Station";
 import IStation from "../interfaces/IStation";
 import ParameterType from "../entities/ParameterType";
-import { In } from "typeorm";
+import { Between, In, LessThanOrEqual, MoreThanOrEqual } from "typeorm";
 
 
 const stationParameter = AppDataSource.getRepository(StationParameter);
@@ -74,6 +74,130 @@ const getDahsBoardData = async (id: number): Promise<JsonObject> => {
 };
 
 
+
+const getDahsBoardDataBeTweenDates = async (id: number, initialDateUnixtime: number, finalDateUnixtime:number): Promise<JsonObject> => {
+  
+  // Consulta todas as medições entre as datas especificadas
+  const dashBoardList = await stationParameter.find({
+    relations: ["station", "parameter_type", "measures"],
+    where: {
+        station: {
+            id_station: id
+      },
+      measures: {
+        unixtime: LessThanOrEqual(finalDateUnixtime) && MoreThanOrEqual(initialDateUnixtime)
+      }
+    }
+});
+
+  const station = await dashBoardRepository.find({
+    relations: ["location"],
+    where: { id_station: id },
+  });
+
+  const formattedData: { [key: string]: any } = {
+    id_estacao: station[0],
+    dailyData: []
+  };
+
+  // Agrupa as medições por data
+  const measurementsByDay = groupMeasurementsByDay(dashBoardList);
+
+  // Calcula o valor máximo, mínimo e médio de cada dia
+  for (const measurementsArray of measurementsByDay) {
+    
+
+    const dailyInfo = {
+      date: measurementsArray.date,
+      avgParameterValues: measurementsArray.parameterStats,
+      measurements: measurementsArray.measurements.map(measure => ({
+        description: measure.description,
+        value: measure.value,
+        parameter_type: measure.parameter_type
+      })),
+      quantityMeasurements: measurementsArray.measurements.length
+    };
+
+    formattedData.dailyData.push(dailyInfo);
+  }
+
+  return formattedData;
+};
+
+interface ParameterStats {
+  minValue: number;
+  maxValue: number;
+  avgValue: number;
+}
+
+interface DailyMeasurement {
+  date: string;
+  measurements: any[];
+  parameterStats: { [paramDescription: string]: ParameterStats };
+}
+
+function groupMeasurementsByDay(measurements: any[]): DailyMeasurement[] {
+  const groupedMeasurements: DailyMeasurement[] = [];
+
+  for (const measure of measurements) {
+    for (const singleMeasure of measure.measures) {
+      const measureDate = new Date(singleMeasure.unixtime * 1000);
+      const dateString = `${measureDate.getFullYear()}-${String(measureDate.getMonth() + 1).padStart(2, '0')}-${String(measureDate.getDate()).padStart(2, '0')}`;
+
+      let dailyMeasurement = groupedMeasurements.find(item => item.date === dateString);
+
+      if (!dailyMeasurement) {
+        dailyMeasurement = {
+          date: dateString,
+          measurements: [],
+          parameterStats: {}
+        };
+        groupedMeasurements.push(dailyMeasurement);
+      }
+
+      dailyMeasurement.measurements.push({
+        description: measure.parameter_type.description,
+        value: singleMeasure.value,
+        parameter_type: measure.parameter_type
+      });
+    }
+  }
+
+  // Calcula o valor mínimo, máximo e médio de cada parâmetro para cada dia
+  for (const dailyMeasurement of groupedMeasurements) {
+    const parameterStats: { [paramDescription: string]: ParameterStats } = {};
+
+    for (const measurement of dailyMeasurement.measurements) {
+      const paramName = measurement.description;
+      const paramValue = measurement.value;
+
+      if (!parameterStats[paramName]) {
+        parameterStats[paramName] = {
+          minValue: paramValue,
+          maxValue: paramValue,
+          avgValue: paramValue
+        };
+      } else {
+        parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
+        parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
+        parameterStats[paramName].avgValue += paramValue;
+      }
+    }
+
+    for (const paramName in parameterStats) {
+      parameterStats[paramName].avgValue /= dailyMeasurement.measurements.length;
+    }
+
+    dailyMeasurement.parameterStats = parameterStats;
+  }
+  return  groupedMeasurements;
+}
+
+
+
+
+
+
 const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): Promise<JsonObject> => {
 
   const date = new Date(unixtime * 1000);
@@ -132,5 +256,5 @@ const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): P
 
 
 
-export { getDahsBoardData, getDahsBoardDataUnixTime };
+export { getDahsBoardData, getDahsBoardDataUnixTime, getDahsBoardDataBeTweenDates };
 export default stationParameter;
