@@ -2,9 +2,7 @@ import StationParameter from '../entities/StationParameter';
 import Measure from '../entities/Measure';
 import { AppDataSource } from '../../database/data-source';
 import Alert from '../entities/Alert';
-import Station from '../entities/Station';
-import ParameterType from '../entities/ParameterType';
-import Unit from '../entities/Unit';
+
 
 
 
@@ -25,22 +23,64 @@ export async function ativacaoAlert(measure: Measure): Promise<void> {
     .createQueryBuilder("alert")
     .where("alert.stationIdStation = :stationIdStation", { stationIdStation })
     .andWhere("alert.parameterTypeIdParameterType = :parameterTypeIdParameterType", { parameterTypeIdParameterType })
-    .andWhere("alert.value > :value", { value })
     .getMany();
+
+    alerts.forEach(alert => {
+        let operator;
     
-    const filteredAlerts = alerts.filter(alert =>
-        alert.station.id_station === stationIdStation &&
-        alert.parameter_type.id_parameter_type === parameterTypeIdParameterType
-    );
+        switch (alert.condition) {
+            case "Igual a":
+                operator = "==";
+                break;
+            case "Maior que":
+                operator = ">";
+                break;
+            case "Maior ou Igual a":
+                operator = ">=";
+                break;
+            case "Menor que":
+                operator = "<";
+                break;
+            case "Menor ou Igual a":
+                operator = "<=";
+                break;
+            default:
+                console.log(`Condition not recognized: ${alert.condition}`);
+                break;
+        }
 
+        let alertMessage;
+    switch (operator) {
+        case "==":
+            if (value == alert.value) {
+                alertMessage = "ALERTA DE MEDIDA";
+            }
+            break;
+        case ">":
+            if (value > alert.value) {
+                alertMessage = "ALERTA DE MEDIDA";
+            }
+            break;
+        case ">=":
+            if (value >= alert.value) {
+                alertMessage = "ALERTA DE MEDIDA";
+            }
+            break;
+        case "<":
+            if (value < alert.value) {
+                alertMessage = "ALERTA DE MEDIDA";
+            }
+            break;
+        case "<=":
+            if (value <= alert.value) {
+                alertMessage = "ALERTA DE MEDIDA";
+            }
+            break;
+    }
 
-
-    
-  } else {
-    console.error(`StationParameter com ID ${station_parameter_id} não encontrado`);
-  }
+    if (alertMessage) {
+        console.log(alertMessage);
+    }
+    });
 }
-
-function MoreThan(value: number): number | import("typeorm").FindOperator<number> {
-    throw new Error('Function not implemented.');
 }
