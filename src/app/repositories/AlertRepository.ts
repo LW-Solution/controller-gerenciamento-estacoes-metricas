@@ -13,7 +13,7 @@ const alertRepository = AppDataSource.getRepository(Alert);
 
 const getAlert = async (): Promise<IAlert[]> => {
     const alertList = await alertRepository.find({
-        relations: ["parameter_type","station"]
+        relations: ["parameter_type", "parameter_type.unit", "station"]
     });
 
     return alertList;
@@ -22,14 +22,14 @@ const getAlert = async (): Promise<IAlert[]> => {
 const getAlertById = async (id: number): Promise<IAlert | undefined> => {
     const alert = await alertRepository.findOne({
         where: { id_alert: id },
-    relations: ["parameter_type", "station"],
+    relations: ["parameter_type", "parameter_type.unit", "station"],
 });
     return alert;
 };
 
 
 const createAlert = async (alert: IAlert): Promise<IAlert> => {
-    const { condition, station_id, parameter_type_id } = alert;
+    const { condition, description, value, station_id, parameter_type_id } = alert;
 
     try {
         // Encontre a estação pelo ID
@@ -52,6 +52,8 @@ const createAlert = async (alert: IAlert): Promise<IAlert> => {
 
         const newAlert = alertRepository.create({
             condition: condition,
+            description: description,
+            value: value,
             station: station,
             parameter_type: parameterType
         });
@@ -64,7 +66,7 @@ const createAlert = async (alert: IAlert): Promise<IAlert> => {
     }
 };
 
-const updateAlert = async (id: number, condition: string, stationIdStation: number, parameterTypeIdParameterType: number): Promise<IAlert | undefined> => {
+const updateAlert = async (id: number, condition: string, description: string, value: number, id_station: number, id_parameter_type: number): Promise<IAlert | undefined> => {
     try {
         const existingAlert = await alertRepository.findOne({
             where: { id_alert: id },
@@ -76,8 +78,10 @@ const updateAlert = async (id: number, condition: string, stationIdStation: numb
         }
 
         existingAlert.condition = condition;
-        existingAlert.station.id_station = stationIdStation;
-        existingAlert.parameter_type.id_parameter_type = parameterTypeIdParameterType;
+        existingAlert.description = description;
+        existingAlert.value = value;
+        existingAlert.station.id_station = id_station;
+        existingAlert.parameter_type.id_parameter_type = id_parameter_type;
 
         const updatedAlert = await alertRepository.save(existingAlert);
 
