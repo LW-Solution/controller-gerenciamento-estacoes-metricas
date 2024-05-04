@@ -27,7 +27,7 @@ dashBoardRouter.get("/bydate/:initialDate/:finalDate/:id", async (req: Request, 
     console.log(initialDateUnixtime)
     console.log(finalDateUnixtime)
     try {
-        const dashBoardData = await getDahsBoardDataBeTweenDates(idStringToIdNumber, initialDateUnixtime, finalDateUnixtime)
+        const dashBoardData = await getDahsBoardDataBeTweenDates(idStringToIdNumber, initialDateUnixtime + 86400, finalDateUnixtime+ 86400)
         return res.status(200).json(dashBoardData);
     } catch (error) {
         return res.status(500).json({ message: "Erro ao obter dados do dashboard", error: error.message });

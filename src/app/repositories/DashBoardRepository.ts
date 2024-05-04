@@ -85,7 +85,7 @@ const getDahsBoardDataBeTweenDates = async (id: number, initialDateUnixtime: num
             id_station: id
       },
       measures: {
-        unixtime: LessThanOrEqual(finalDateUnixtime) && MoreThanOrEqual(initialDateUnixtime)
+        unixtime: Between(initialDateUnixtime, finalDateUnixtime)
       }
     }
 });
