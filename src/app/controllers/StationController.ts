@@ -37,21 +37,17 @@ stationRouter.post("/", async (req: Request, res: Response) => {
     }
 })
 
-stationRouter.put("/:id", async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { station_description, locationIdLocation } = req.body;
-  
-    try {
-      const updatingStation = await updateStation(parseInt(id, 10), station_description, locationIdLocation);
-      return res.status(200).json(updatingStation);
-    } catch (error) {
-      return res.status(404).json({ message: "não foi possível atualizar a estação" });
-    }
+stationRouter.put("/:id_station", async (req: Request, res: Response) => {
+        const { id_station } = req.params;
+        const { station_description, location: {id_location} } = req.body;
+    
+        try {
+            const updatingStation = await updateStation(parseInt(id_station, 10), station_description, id_location);
+            return res.status(200).json(updatingStation);
+        } catch (error) {
+            return res.status(404).json({ message: "não foi possível atualizar a estação" });
+        }
 });
-
-
-
-  
 
 stationRouter.delete("/:id", async (req: Request, res: Response) => {
     const {id} = req.params;
