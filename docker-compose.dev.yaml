@@ -92,6 +92,21 @@ services:
       - controller-cadastro-autenticacao
       - controller-gerenciamento-estacoes-metricas
 
+  controller-recepcao-dados:
+    image: jonasrsribeiro/lw-controller-recepcao-dados:develop
+    ports:
+      - "3002:3002"
+    restart: always
+    networks:
+      rede_microsservicos:
+        ipv4_address: 172.18.0.8
+    depends_on:
+      - db
+      - mysql
+      - controller-cadastro-autenticacao
+      - controller-gerenciamento-estacoes-metricas
+      - frontend
+
 volumes:
   postgres-data:
   mysql-data:

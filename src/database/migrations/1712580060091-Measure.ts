@@ -15,7 +15,7 @@ export class CreateUsersTable1712580060091 implements MigrationInterface {
                     },
                     {
                         name: 'value',
-                        type: 'int',
+                        type: 'decimal',
                     },
                     {
                         name: 'unixtime',

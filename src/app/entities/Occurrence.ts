@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, BaseEntity, Column } from "typeorm";
 import Alert from "./Alert";
 import Measure from "./Measure";
 
@@ -6,6 +6,9 @@ import Measure from "./Measure";
 export default class Occurrence  {
     @PrimaryGeneratedColumn()
     id_occurrence: number;
+
+    @Column()
+    status_alert: number;
 
     @ManyToOne(() => Alert, alert => alert.occurrences)
     alert: Alert;
