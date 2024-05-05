@@ -8,7 +8,7 @@ const occurrenceRepository = AppDataSource.getRepository(Occurrence)
 
 const getOccurrences = async (): Promise<Occurrence[]> => {
   const occurrences = await occurrenceRepository.find({
-    relations: ["alert", "measure"],
+    relations: ["alert", "alert.station", "measure"],
   })
   return occurrences
 }
