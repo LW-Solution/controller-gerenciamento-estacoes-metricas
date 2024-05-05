@@ -87,9 +87,7 @@ export async function ativacaoAlert(measure: Measure): Promise<void> {
       }
 
       if (alertMessage) {
-        console.log(alertMessage,'chegou linha 90')
-        console.log(alert?.id_alert,'alert')
-        console.log(measure?.id_measure,'measure')
+        
         const occurrenceRepository = AppDataSource.getRepository(Occurrence)
         // Cria uma nova instância de Occurrence
         const occurrence = new Occurrence()
