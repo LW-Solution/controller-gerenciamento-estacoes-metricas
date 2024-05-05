@@ -45,13 +45,13 @@ async function saveData(jsonObject: any): Promise<void> {
       throw new Error(`ParameterType with name ${paramName} not found`);
     }
 
-    console.log(parameterType)
+    
 
     const stationParameter = await stationParameterRepository.findOne({
       where: { parameter_type: parameterType, station: station },
     });
 
-    console.log(stationParameter)
+   
 
     if (!stationParameter) {
       throw new Error(
@@ -78,7 +78,7 @@ async function saveData(jsonObject: any): Promise<void> {
     }
 
     measure.station_parameter = stationParameter;
-    await measureRepository.save(measure);/* .then(() => ativacaoAlert(measure)) */;
+    await measureRepository.save(measure).then(() => ativacaoAlert(measure));
   }
 }
 
