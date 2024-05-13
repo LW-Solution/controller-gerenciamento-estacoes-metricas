@@ -129,6 +129,7 @@ interface ParameterStats {
   minValue: number;
   maxValue: number;
   avgValue: number;
+  qtdMeasurements: number;
 }
 
 interface DailyMeasurement {
@@ -176,17 +177,19 @@ function groupMeasurementsByDay(measurements: any[]): DailyMeasurement[] {
         parameterStats[paramName] = {
           minValue: paramValue,
           maxValue: paramValue,
-          avgValue: paramValue
+          avgValue: paramValue,
+          qtdMeasurements: 0
         };
       } else {
         parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
         parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
         parameterStats[paramName].avgValue += paramValue;
+        parameterStats[paramName].qtdMeasurements += 1; 
       }
     }
 
     for (const paramName in parameterStats) {
-      parameterStats[paramName].avgValue /= dailyMeasurement.measurements.length;
+      parameterStats[paramName].avgValue /= parameterStats[paramName].qtdMeasurements;
     }
 
     dailyMeasurement.parameterStats = parameterStats;
@@ -292,7 +295,8 @@ function groupMeasurementsByMonth(measurements: any[]): MonthlyMeasurement[] {
         parameterStats[paramName] = {
           minValue: paramValue,
           maxValue: paramValue,
-          avgValue: paramValue
+          avgValue: paramValue,
+          qtdMeasurements: 0
         };
       } else {
         parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
