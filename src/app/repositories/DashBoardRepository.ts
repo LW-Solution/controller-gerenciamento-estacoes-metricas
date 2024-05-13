@@ -302,12 +302,13 @@ function groupMeasurementsByMonth(measurements: any[]): MonthlyMeasurement[] {
         parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
         parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
         parameterStats[paramName].avgValue += paramValue;
+        parameterStats[paramName].qtdMeasurements += 1;
       }
     }
 
     // Calcula a média por mês
     for (const paramName in parameterStats) {
-      parameterStats[paramName].avgValue /= monthlyMeasurement.measurements.length;
+      parameterStats[paramName].avgValue /= parameterStats[paramName].qtdMeasurements;
     }
 
     monthlyMeasurement.parameterStats = parameterStats;
