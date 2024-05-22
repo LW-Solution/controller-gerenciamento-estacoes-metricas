@@ -10,6 +10,7 @@ recepcaoRouter.post("/", async (req: Request, res: Response) => {
 
     const jsonArray = req.body;
 
+
     // Processar cada objeto JSON
     // Validar a estrutura do objeto (opcional, dependendo dos requisitos)
     if (
