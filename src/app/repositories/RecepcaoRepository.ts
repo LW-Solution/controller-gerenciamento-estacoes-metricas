@@ -1,85 +1,82 @@
-import { AppDataSource } from "../../database/data-source";
-import Measure from "../entities/Measure";
-import Station from "../entities/Station";
-import StationParameter from "../entities/StationParameter";
-import ParameterType from "../entities/ParameterType";
-import { ativacaoAlert } from "../scripts/ativacaoAlerta";
+import { AppDataSource } from "../../database/data-source"
+import Measure from "../entities/Measure"
+import Station from "../entities/Station"
+import StationParameter from "../entities/StationParameter"
+import ParameterType from "../entities/ParameterType"
+import { ativacaoAlert } from "../scripts/ativacaoAlerta"
 
 async function saveData(jsonObject: any): Promise<void> {
-  const stationRepository = AppDataSource.getTreeRepository(Station);
-  const parameterTypeRepository =
-    AppDataSource.getTreeRepository(ParameterType);
+  const stationRepository = AppDataSource.getTreeRepository(Station)
+  const parameterTypeRepository = AppDataSource.getTreeRepository(ParameterType)
   const stationParameterRepository =
-    AppDataSource.getTreeRepository(StationParameter);
-  const measureRepository = AppDataSource.getTreeRepository(Measure);
+    AppDataSource.getTreeRepository(StationParameter)
+  const measureRepository = AppDataSource.getTreeRepository(Measure)
 
-  const { uuid, station_description, unix, parametros } = jsonObject;
+  const { uuid, station_description, unix, parametros } =
+    jsonObject
 
   const station = await stationRepository.findOne({
-    where: { station_description },
-  });
+    where: { station_mac_address: uuid },
+  })
+  console.log(jsonObject)
+  console.log(station)
 
   if (!station) {
-    throw new Error(
-      `Station with description ${station_description} not found`
-    );
+    throw new Error(`Station with description ${station_description} not found`)
   }
 
-  if (station.uuid === null || station.uuid !== uuid) {
-    if (station.uuid === null) {
-      station.uuid = uuid;
-      await stationRepository.save(station);
-    } else if (station.uuid !== uuid) {
+  if (
+    station.station_mac_address === null ||
+    station.station_mac_address !== uuid
+  ) {
+    if (station.station_mac_address === null) {
+      station.station_mac_address = uuid
+      await stationRepository.save(station)
+    } else if (station.station_mac_address !== uuid) {
       throw new Error(
-        `UUID for station ${station_description} does not match the provided UUID`
-      );
+        `station_mac_address for station ${station_description} does not match the provided station_mac_address`
+      )
     }
   }
 
   for (const [paramName, paramValue] of Object.entries(parametros)) {
     const parameterType = await parameterTypeRepository.findOne({
       where: { parameter_name: paramName },
-    });
+    })
 
     if (!parameterType) {
-      throw new Error(`ParameterType with name ${paramName} not found`);
+      throw new Error(`ParameterType with name ${paramName} not found`)
     }
-
-    
 
     const stationParameter = await stationParameterRepository.findOne({
       where: { parameter_type: parameterType, station: station },
-    });
-
-   
+    })
 
     if (!stationParameter) {
       throw new Error(
         `StationParameter for ParameterType ${paramName} not found for station ${station_description}`
-      );
+      )
     }
 
-    const measure = new Measure();
+    const measure = new Measure()
 
     if (typeof paramValue === "number") {
-      measure.value = paramValue;
+      measure.value = paramValue
     } else {
       throw new Error(
         `Expected a number for measure value, but got ${typeof paramValue}`
-      );
+      )
     }
 
     if (typeof unix === "number") {
-      measure.unixtime = unix;
+      measure.unixtime = unix
     } else {
-      throw new Error(
-        `Expected a number for unix time, but got ${typeof unix}`
-      );
+      throw new Error(`Expected a number for unix time, but got ${typeof unix}`)
     }
 
-    measure.station_parameter = stationParameter;
-    await measureRepository.save(measure).then(() => ativacaoAlert(measure));
+    measure.station_parameter = stationParameter
+    await measureRepository.save(measure).then(() => ativacaoAlert(measure))
   }
 }
 
-export default saveData;
+export default saveData
