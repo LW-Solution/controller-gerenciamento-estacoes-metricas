@@ -24,3 +24,5 @@ AppDataSource.initialize().then(async () => {
         console.log(`Server started on port ${process.env.PORT}`)
     })
 })
+
+export default app;
