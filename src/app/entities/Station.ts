@@ -11,6 +11,9 @@ export default class Station  {
     @Column({ unique: true })
     station_description: string;
 
+    @Column({ unique: true })
+    station_mac_address: string;
+
     @ManyToOne(() => Location, location => location.stations)
     location: Location;
 
@@ -20,6 +23,4 @@ export default class Station  {
     @OneToMany(() => Alert, alert => alert.station)
     alerts: Alert[];
 
-    @Column({ nullable: true })
-    uuid: string;
 }

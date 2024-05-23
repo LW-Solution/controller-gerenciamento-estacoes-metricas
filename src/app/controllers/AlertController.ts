@@ -29,14 +29,15 @@ alertRouter.get("/:id", async (req: Request, res: Response) => {
 })
 
 alertRouter.post("/", async (req: Request, res: Response) => {
-    const { condition, station_id, parameter_type_id , description} = req.body;
+    const { condition, description, value, station: {id_station}, parameter_type: {id_parameter_type}} = req.body;
   
     const newAlert: IAlert = {
       id_alert: 0, // Pode ser 0 se for gerado automaticamente pelo banco de dados
-      description,
-      condition,
-      station_id: station_id,
-      parameter_type_id: parameter_type_id
+      description: description,
+      condition: condition,
+      value: value,
+      station_id: id_station,
+      parameter_type_id: id_parameter_type
     };
   
     try {
@@ -47,12 +48,13 @@ alertRouter.post("/", async (req: Request, res: Response) => {
     }
   });
 
-  alertRouter.put("/:id", async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { condition, stationIdStation, parameterTypeIdParameterType } = req.body;
+  alertRouter.put("/:id_alert", async (req: Request, res: Response) => {
+    const { id_alert } = req.params;
+
+    const { condition, description, value, station: {id_station}, parameter_type: {id_parameter_type} } = req.body;
   
     try {
-      const result = await updateAlert(parseInt(id, 10), condition, stationIdStation, parameterTypeIdParameterType);
+      const result = await updateAlert(parseInt(id_alert, 10), condition, description, value, id_station, id_parameter_type);
       
       if (!result) {
         return res.status(404).json({ message: "Alerta não encontrado para atualização" });

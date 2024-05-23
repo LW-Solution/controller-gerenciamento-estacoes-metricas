@@ -31,6 +31,9 @@ import { FKAlertToOccurrence1712753259171 } from "./migrations/1712753259171-FK-
 import { AdicionandoColunaParameterType1714325746698 } from "./migrations/1714325746698-AdicionandoColunaParameterType"
 import { AlteracaoCoordenadasParaLatidutitudeLongitude1714586269833 } from "./migrations/1714586269833-AlteracaoCoordenadasParaLatidutitudeLongitude";
 import { CreateColumnDescriptionOnAlert1714752950931 } from "./migrations/1714752950931-CreateColumnDescriptionOnAlert";
+import { AdicionarColunaStatusValuenoAlert1714918418459 } from "./migrations/1714918418459-AdicionarColunaStatusValuenoAlert";
+import { Removendocolunauuid1716217100587 } from "./migrations/1716217100587-removendocolunauuid";
+import { AdicionandocolunastationMacAddress1716217235028 } from "./migrations/1716217235028-adicionandocolunastation_mac_address";
 
 const envFile = process.env.NODE_ENV == 'production' ? '.env.prod' : '.env.dev';
 
@@ -69,7 +72,11 @@ export const AppDataSource = new DataSource({
         FKAlertToOccurrence1712753259171,
         AdicionandoColunaParameterType1714325746698,
         AlteracaoCoordenadasParaLatidutitudeLongitude1714586269833,
-        CreateColumnDescriptionOnAlert1714752950931
+        CreateColumnDescriptionOnAlert1714752950931,
+        AdicionarColunaStatusValuenoAlert1714918418459,
+        Removendocolunauuid1716217100587,
+        AdicionandocolunastationMacAddress1716217235028
+
     ],
     
     subscribers: [],

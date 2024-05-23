@@ -13,6 +13,7 @@ const getParameterTypes = async (): Promise<IParameterType[]> => {
   return parameterTypeList.map((parameterType) => ({
     id_parameter_type: parameterType.id_parameter_type,
     unitIdUnit: parameterType.unit ? parameterType.unit.id_unit : null,
+    unit: parameterType.unit ? parameterType.unit.unit : null,
     description: parameterType.description,
     factor: parameterType.factor,
     offset: parameterType.offset,
@@ -33,6 +34,7 @@ const getParameterTypeById = async (id: number): Promise<IParameterType | undefi
   const parameterTypeData = {
     id_parameter_type: parameterType.id_parameter_type,
     unitIdUnit: parameterType.unit ? parameterType.unit.id_unit : null,
+    unit: parameterType.unit ? parameterType.unit.unit : null,
     description: parameterType.description,
     factor: parameterType.factor,
     offset: parameterType.offset,
