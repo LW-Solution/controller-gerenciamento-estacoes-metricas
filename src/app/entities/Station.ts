@@ -23,6 +23,4 @@ export default class Station  {
     @OneToMany(() => Alert, alert => alert.station)
     alerts: Alert[];
 
-    @Column({ nullable: true })
-    uuid: string;
 }
