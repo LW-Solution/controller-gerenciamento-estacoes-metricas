@@ -12,7 +12,7 @@ async function saveData(jsonObject: any): Promise<void> {
     AppDataSource.getTreeRepository(StationParameter)
   const measureRepository = AppDataSource.getTreeRepository(Measure)
 
-  const { uuid, station_description, unix, parametros } =
+  const { uuid, unix, parametros } =
     jsonObject
 
   const station = await stationRepository.findOne({
@@ -22,7 +22,7 @@ async function saveData(jsonObject: any): Promise<void> {
   console.log(station)
 
   if (!station) {
-    throw new Error(`Station with description ${station_description} not found`)
+    throw new Error(`Station with description ${uuid} not found`)
   }
 
   if (
@@ -34,7 +34,7 @@ async function saveData(jsonObject: any): Promise<void> {
       await stationRepository.save(station)
     } else if (station.station_mac_address !== uuid) {
       throw new Error(
-        `station_mac_address for station ${station_description} does not match the provided station_mac_address`
+        `station_mac_address for station ${uuid} does not match the provided station_mac_address`
       )
     }
   }
@@ -54,7 +54,7 @@ async function saveData(jsonObject: any): Promise<void> {
 
     if (!stationParameter) {
       throw new Error(
-        `StationParameter for ParameterType ${paramName} not found for station ${station_description}`
+        `StationParameter for ParameterType ${paramName} not found for station ${uuid}`
       )
     }
 
@@ -75,6 +75,8 @@ async function saveData(jsonObject: any): Promise<void> {
     }
 
     measure.station_parameter = stationParameter
+
+    console.log(measure)
     await measureRepository.save(measure).then(() => ativacaoAlert(measure))
   }
 }
