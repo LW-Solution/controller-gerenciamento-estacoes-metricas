@@ -15,7 +15,6 @@ recepcaoRouter.post("/", async (req: Request, res: Response) => {
     // Validar a estrutura do objeto (opcional, dependendo dos requisitos)
     if (
       !jsonArray.uuid ||
-      !jsonArray.station_description ||
       !jsonArray.unix ||
       !jsonArray.parametros
     ) {
