@@ -96,9 +96,14 @@ const getDahsBoardDataBeTweenDates = async (id: number, initialDateUnixtime: num
     where: { id_station: id },
   });
 
+  const parameterIds = dashBoardList.map(item => item.parameter_type.id_parameter_type);
+
+  const parameter_types = await parameterTypeRepository.find({ where: { id_parameter_type: In(parameterIds) }, relations: ["unit"] });
+
   const formattedData: { [key: string]: any } = {
     id_estacao: station[0],
-    dailyData: []
+    parameter_types: parameter_types,
+    dailyData: [],
   };
 
   // Agrupa as medições por data
@@ -114,7 +119,7 @@ const getDahsBoardDataBeTweenDates = async (id: number, initialDateUnixtime: num
       measurements: measurementsArray.measurements.map(measure => ({
         description: measure.description,
         value: measure.value,
-        parameter_type: measure.parameter_type
+        unixtime: measure.unixtime,
       })),
       quantityMeasurements: measurementsArray.measurements.length
     };
@@ -129,6 +134,7 @@ interface ParameterStats {
   minValue: number;
   maxValue: number;
   avgValue: number;
+  qtdMeasurements: number;
 }
 
 interface DailyMeasurement {
@@ -155,11 +161,11 @@ function groupMeasurementsByDay(measurements: any[]): DailyMeasurement[] {
         };
         groupedMeasurements.push(dailyMeasurement);
       }
-
+    
       dailyMeasurement.measurements.push({
+        unixtime: singleMeasure.unixtime,
         description: measure.parameter_type.description,
         value: singleMeasure.value,
-        parameter_type: measure.parameter_type
       });
     }
   }
@@ -176,17 +182,19 @@ function groupMeasurementsByDay(measurements: any[]): DailyMeasurement[] {
         parameterStats[paramName] = {
           minValue: paramValue,
           maxValue: paramValue,
-          avgValue: paramValue
+          avgValue: paramValue,
+          qtdMeasurements: 0
         };
       } else {
         parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
         parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
         parameterStats[paramName].avgValue += paramValue;
+        parameterStats[paramName].qtdMeasurements += 1; 
       }
     }
 
     for (const paramName in parameterStats) {
-      parameterStats[paramName].avgValue /= dailyMeasurement.measurements.length;
+      parameterStats[paramName].avgValue /= parameterStats[paramName].qtdMeasurements;
     }
 
     dailyMeasurement.parameterStats = parameterStats;
@@ -292,18 +300,20 @@ function groupMeasurementsByMonth(measurements: any[]): MonthlyMeasurement[] {
         parameterStats[paramName] = {
           minValue: paramValue,
           maxValue: paramValue,
-          avgValue: paramValue
+          avgValue: paramValue,
+          qtdMeasurements: 0
         };
       } else {
         parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
         parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
         parameterStats[paramName].avgValue += paramValue;
+        parameterStats[paramName].qtdMeasurements += 1;
       }
     }
 
     // Calcula a média por mês
     for (const paramName in parameterStats) {
-      parameterStats[paramName].avgValue /= monthlyMeasurement.measurements.length;
+      parameterStats[paramName].avgValue /= parameterStats[paramName].qtdMeasurements;
     }
 
     monthlyMeasurement.parameterStats = parameterStats;

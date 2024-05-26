@@ -14,7 +14,7 @@ export class AdicionarColunaStatusValuenoAlert1714918418459
         "occurrence",
         new TableColumn({
           name: "status_alert",
-          type: "number",
+          type: "decimal",
           isNullable: true,
         })
       )
