@@ -26,7 +26,7 @@ jobs:
 
       - name: Build and tag Docker image for Development
         run: |
-          docker build -t jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas .
+          docker build -t jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas -f Dockerfile.dev .
           docker tag jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:latest jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:develop
 
       - name: Log in to Docker Hub
