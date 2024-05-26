@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - develop
+      - staging
 
 jobs:
   build:
@@ -36,11 +36,3 @@ jobs:
         run: |
           docker push jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:latest
           docker push jonasrsribeiro/lw-controller-gerenciamento-estacoes-metricas:develop
-
-      - name: Get latest sprint number and increment
-        id: sprint
-        run: |
-          LATEST_SPRINT=$(git tag | grep Sprint | sort -V | tail -n 1)
-          SPRINT_NUMBER=$(echo $LATEST_SPRINT | grep -o -E '[0-9]+')
-          NEXT_SPRINT_NUMBER=$((SPRINT_NUMBER + 1))
-          echo "::set-output name=next_sprint::Sprint$NEXT_SPRINT_NUMBER"
