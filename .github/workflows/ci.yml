@@ -40,7 +40,11 @@ jobs:
       - name: Get latest sprint number and increment
         id: sprint
         run: |
+          set -x
           LATEST_SPRINT=$(git tag | grep Sprint | sort -V | tail -n 1)
+          echo "LATEST_SPRINT: $LATEST_SPRINT"
           SPRINT_NUMBER=$(echo $LATEST_SPRINT | grep -o -E '[0-9]+')
+          echo "SPRINT_NUMBER: $SPRINT_NUMBER"
           NEXT_SPRINT_NUMBER=$((SPRINT_NUMBER + 1))
+          echo "NEXT_SPRINT_NUMBER: $NEXT_SPRINT_NUMBER"
           echo "::set-output name=next_sprint::Sprint$NEXT_SPRINT_NUMBER"
