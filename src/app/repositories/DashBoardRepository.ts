@@ -137,8 +137,8 @@ function groupMeasurementsByHour(measurements: any[]): HourlyMeasurement[] {
     for (const singleMeasure of measure.measures) {
       const measureDate = new Date(singleMeasure.unixtime * 1000);
       const dateString = `${measureDate.getFullYear()}-${String(measureDate.getMonth() + 1).padStart(2, '0')}-${String(measureDate.getDate()).padStart(2, '0')}`;
-      const hourString = String(measureDate.getHours()).padStart(2, '0');
-
+      const hourString = `${String(measureDate.getHours()).padStart(2, '0')}00`;
+      
       let hourlyMeasurement = groupedMeasurements.find(item => item.date === dateString && item.hour === hourString);
 
       if (!hourlyMeasurement) {
