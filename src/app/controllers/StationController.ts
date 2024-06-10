@@ -26,6 +26,14 @@ stationRouter.get("/:id", async (req: Request, res: Response) => {
     }
 })
 
+stationRouter.get("/getparameters/:id", async ((req: Request, res: Response) => {
+    const {id} = req.params;
+    let idNumber = parseInt(id);
+    try{}catch(error){
+        return res.status(404).json({ message: "não foi possível trazer os parametros da estacao solicitada"})
+    }
+})
+
 stationRouter.post("/", async (req: Request, res: Response) => {
     const newStation = {...req.body}
 
