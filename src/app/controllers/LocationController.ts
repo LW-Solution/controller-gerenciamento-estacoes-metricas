@@ -1,9 +1,11 @@
 import { Request,Response,Router } from "express";
 import { createLocation, deleteLocation, getLocation, getLocationById, updateLocation } from "../repositories/LocationRepository";
+import Autenticador from "../middlewares/autenticador";
+
 
 const locationRouter = Router();
 
-locationRouter.get('/', async (_req: Request, res: Response): Promise<Response>=>{
+locationRouter.get('/', Autenticador,async (_req: Request, res: Response): Promise<Response>=>{
     const location = await getLocation();
     return res.status(200).json(location);
 });
