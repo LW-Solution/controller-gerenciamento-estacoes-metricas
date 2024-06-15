@@ -25,7 +25,7 @@ dashBoardRouter.get("/bydate/:initialDate/:finalDate/:id", async (req: Request, 
     finalDateObj.setHours(23, 59, 59, 999);
     const finalDateUnixtime = finalDateObj.getTime() / 1000;
     try {
-        const dashBoardData = await getDahsBoardDataBeTweenDates(idStringToIdNumber, initialDateUnixtime, finalDateUnixtime)
+        const dashBoardData = await getDahsBoardDataBeTweenDates(idStringToIdNumber, initialDateUnixtime + 86400, finalDateUnixtime + 86400)
         return res.status(200).json(dashBoardData);
     } catch (error) {
         return res.status(500).json({ message: "Erro ao obter dados do dashboard", error: error.message });
@@ -42,7 +42,7 @@ dashBoardRouter.get("/bydate/grouphour/:initialDate/:finalDate/:id", async (req:
     finalDateObj.setHours(23, 59, 59, 999);
     const finalDateUnixtime = finalDateObj.getTime() / 1000;
     try {
-        const dashBoardData = await getDashBoardDataGroupbyHour(idStringToIdNumber, initialDateUnixtime, finalDateUnixtime)
+        const dashBoardData = await getDashBoardDataGroupbyHour(idStringToIdNumber, initialDateUnixtime + 86400, finalDateUnixtime + 86400)
         return res.status(200).json(dashBoardData);
     } catch (error) {
         return res.status(500).json({ message: "Erro ao obter dados do dashboard", error: error.message });
@@ -60,7 +60,7 @@ dashBoardRouter.get("/bymonth/:initialDate/:finalDate/:id", async (req: Request,
     finalDateObj.setHours(23, 59, 59, 999);
     const finalDateUnixtime = finalDateObj.getTime() / 1000;
     try {
-        const dashBoardData = await getDahsBoardDataBeTweenMonth(idStringToIdNumber, initialDateUnixtime, finalDateUnixtime)
+        const dashBoardData = await getDahsBoardDataBeTweenMonth(idStringToIdNumber, initialDateUnixtime + 86400, finalDateUnixtime + 86400)
         return res.status(200).json(dashBoardData);
     } catch (error) {
         return res.status(500).json({ message: "Erro ao obter dados do dashboard", error: error.message });
