@@ -183,9 +183,11 @@ function groupMeasurementsByHour(measurements: any[]): HourlyMeasurement[] {
     }
 
     for (const paramName in parameterStats) {
-      parameterStats[paramName].avgValue /= parameterStats[paramName].qtdMeasurements;
+      const stats = parameterStats[paramName];
+      stats.avgValue = parseFloat((stats.avgValue / stats.qtdMeasurements).toFixed(2));
+      stats.minValue = parseFloat(stats.minValue.toFixed(2));
+      stats.maxValue = parseFloat(stats.maxValue.toFixed(2));
     }
-
     hourlyMeasurement.parameterStats = parameterStats;
   }
 
@@ -359,7 +361,7 @@ const getDahsBoardDataBeTweenMonth = async (id: number, initialDateUnixtime: num
       avgParameterValues: measurementsArray.parameterStats,
       measurements: measurementsArray.measurements.map(measure => ({
         description: measure.description,
-        value: measure.value,
+        value: measure.value.toFixed(2),
         parameter_type: measure.parameter_type
       })),
       quantityMeasurements: measurementsArray.measurements.length
