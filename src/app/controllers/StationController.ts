@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import IStation from "../interfaces/IStation";
-import { createStation, deleteStation, getStation, getStationById, updateStation } from "../repositories/StationRepository";
+import { createStation, deleteStation, getStation, getStationById, updateStation, getParametersByStationId} from "../repositories/StationRepository";
 
 
 const stationRouter = Router();
@@ -23,6 +23,20 @@ stationRouter.get("/:id", async (req: Request, res: Response) => {
         return res.status(200).json(findingStation);
     }catch(error){
         return res.status(404).json({ message: "Não foi possível buscar a estação solicitada" })   
+    }
+})
+
+stationRouter.get("/parameters/:id", async (req: Request, res: Response) => {
+    const {id} = req.params;
+    let numberId = parseInt(id);
+
+    try{ 
+        const listParameters = await getParametersByStationId(numberId);
+        console.log("chegou aqui")
+        return res.status(200).json(listParameters);
+    }catch(error){
+       console.log(error)
+       return res.status(404).json({message: "Houve um problema com a solicitação"})
     }
 })
 
