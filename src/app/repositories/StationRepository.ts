@@ -22,6 +22,35 @@ const getStationById = async (id: number): Promise<IStation | undefined> => {
     return station;
 }
 
+const getParametersByStationId = async (id:number) => {
+  
+  const stationWithParameters = await stationRepository.findOne({
+    where: {id_station: id},
+    relations: ["stationParameters", "stationParameters.parameter_type", 
+      "stationParameters.parameter_type.unit", "stationParameters.measures"]
+  })
+
+  let listaParameters;
+
+  if(stationWithParameters === null){
+     listaParameters = "erro"
+    
+  }else{
+  listaParameters = stationWithParameters.stationParameters.map(parametro => {
+    return {
+      id_parameter_type: parametro?.parameter_type.id_parameter_type || 0,
+      parameter_name: parametro?.parameter_type.parameter_name || "N/A",
+      unit: parametro?.parameter_type.unit.unit || "N/A",
+      measure: parametro?.measures
+    }
+  }
+  
+  )
+  }
+
+  return listaParameters;
+}
+
 
 const createStation = async (station: Station): Promise<IStation> => {
   try {
@@ -80,5 +109,5 @@ const deleteStation = async (id: number): Promise<IStation>  => {
     return deletedStation;
 }
 
-export {createStation, getStation, getStationById, updateStation, deleteStation}
+export {createStation, getStation, getStationById, updateStation, deleteStation, getParametersByStationId}
 export default stationRepository
