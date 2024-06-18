@@ -1,5 +1,7 @@
 import { Request,Response,Router } from "express";
 import { createLocation, deleteLocation, getLocation, getLocationById, updateLocation } from "../repositories/LocationRepository";
+import Autenticador from "../middlewares/autenticador";
+
 
 const locationRouter = Router();
 

@@ -74,7 +74,125 @@ const getDahsBoardData = async (id: number): Promise<JsonObject> => {
   return formattedData;
 };
 
+interface HourlyMeasurement {
+  date: string;
+  hour: string;
+  measurements: any[];
+  parameterStats: { [paramDescription: string]: ParameterStats };
+}
 
+const getDashBoardDataGroupbyHour = async (id: number, initialDateUnixtime: number, finalDateUnixtime: number): Promise<JsonObject> => {
+  // Consulta todas as medições entre as datas especificadas
+  const dashBoardList = await stationParameter.find({
+    relations: ["station", "parameter_type", "measures"],
+    where: {
+      station: {
+        id_station: id
+      },
+      measures: {
+        unixtime: Between(initialDateUnixtime, finalDateUnixtime)
+      }
+    }
+  });
+  const station = await dashBoardRepository.find({
+    relations: ["location"],
+    where: { id_station: id },
+  });
+
+  const parameterIds = dashBoardList.map(item => item.parameter_type.id_parameter_type);
+
+  const parameter_types = await parameterTypeRepository.find({ where: { id_parameter_type: In(parameterIds) }, relations: ["unit"] });
+
+  const formattedData: { [key: string]: any } = {
+    id_estacao: station[0],
+    parameter_types: parameter_types,
+    dailyData: [],
+  };
+
+    // Agrupa as medições por data
+  const measurementsByDayGroupbyHour = groupMeasurementsByHour(dashBoardList);
+  
+  for (const measurementsArray of measurementsByDayGroupbyHour) {
+
+
+    const dailyInfoGroupByHour = {
+      date: measurementsArray.date,
+      hour: measurementsArray.hour,
+      avgParameterValues: measurementsArray.parameterStats,
+      quantityMeasurements: measurementsArray.measurements.length
+    };
+
+    formattedData.dailyData.push(dailyInfoGroupByHour);
+  }
+  
+  return formattedData;
+  
+};
+
+
+function groupMeasurementsByHour(measurements: any[]): HourlyMeasurement[] {
+  const groupedMeasurements: HourlyMeasurement[] = [];
+
+  for (const measure of measurements) {
+    for (const singleMeasure of measure.measures) {
+      const measureDate = new Date(singleMeasure.unixtime * 1000);
+      const dateString = `${measureDate.getFullYear()}-${String(measureDate.getMonth() + 1).padStart(2, '0')}-${String(measureDate.getDate()).padStart(2, '0')}`;
+      const hourString = `${String(measureDate.getHours()).padStart(2, '0')}00`;
+      
+      let hourlyMeasurement = groupedMeasurements.find(item => item.date === dateString && item.hour === hourString);
+
+      if (!hourlyMeasurement) {
+        hourlyMeasurement = {
+          date: dateString,
+          hour: hourString,
+          measurements: [],
+          parameterStats: {}
+        };
+        groupedMeasurements.push(hourlyMeasurement);
+      }
+
+      hourlyMeasurement.measurements.push({
+        unixtime: singleMeasure.unixtime,
+        description: measure.parameter_type.description,
+        value: singleMeasure.value,
+      });
+    }
+  }
+
+  // Calcula o valor mínimo, máximo e médio de cada parâmetro para cada hora
+  for (const hourlyMeasurement of groupedMeasurements) {
+    const parameterStats: { [paramDescription: string]: ParameterStats } = {};
+
+    for (const measurement of hourlyMeasurement.measurements) {
+      const paramName = measurement.description;
+      const paramValue = measurement.value;
+
+      if (!parameterStats[paramName]) {
+        parameterStats[paramName] = {
+          minValue: paramValue,
+          maxValue: paramValue,
+          avgValue: paramValue,
+          qtdMeasurements: 1
+        };
+      } else {
+        parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
+        parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
+        parameterStats[paramName].avgValue += paramValue;
+        parameterStats[paramName].qtdMeasurements += 1;
+      }
+    }
+
+    for (const paramName in parameterStats) {
+      const stats = parameterStats[paramName];
+      stats.avgValue = parseFloat((stats.avgValue / stats.qtdMeasurements).toFixed(2));
+      stats.minValue = parseFloat(stats.minValue.toFixed(2));
+      stats.maxValue = parseFloat(stats.maxValue.toFixed(2));
+    }
+    hourlyMeasurement.parameterStats = parameterStats;
+  }
+
+  return groupedMeasurements;
+}
 
 const getDahsBoardDataBeTweenDates = async (id: number, initialDateUnixtime: number, finalDateUnixtime: number): Promise<JsonObject> => {
 
@@ -107,9 +225,11 @@ const getDahsBoardDataBeTweenDates = async (id: number, initialDateUnixtime: num
   };
 
   // Agrupa as medições por data
+
+
   const measurementsByDay = groupMeasurementsByDay(dashBoardList);
 
-  // Calcula o valor máximo, mínimo e médio de cada dia
+  
   for (const measurementsArray of measurementsByDay) {
 
 
@@ -161,7 +281,7 @@ function groupMeasurementsByDay(measurements: any[]): DailyMeasurement[] {
         };
         groupedMeasurements.push(dailyMeasurement);
       }
-    
+
       dailyMeasurement.measurements.push({
         unixtime: singleMeasure.unixtime,
         description: measure.parameter_type.description,
@@ -189,7 +309,7 @@ function groupMeasurementsByDay(measurements: any[]): DailyMeasurement[] {
         parameterStats[paramName].minValue = Math.min(parameterStats[paramName].minValue, paramValue);
         parameterStats[paramName].maxValue = Math.max(parameterStats[paramName].maxValue, paramValue);
         parameterStats[paramName].avgValue += paramValue;
-        parameterStats[paramName].qtdMeasurements += 1; 
+        parameterStats[paramName].qtdMeasurements += 1;
       }
     }
 
@@ -241,7 +361,7 @@ const getDahsBoardDataBeTweenMonth = async (id: number, initialDateUnixtime: num
       avgParameterValues: measurementsArray.parameterStats,
       measurements: measurementsArray.measurements.map(measure => ({
         description: measure.description,
-        value: measure.value,
+        value: measure.value.toFixed(2),
         parameter_type: measure.parameter_type
       })),
       quantityMeasurements: measurementsArray.measurements.length
@@ -266,7 +386,7 @@ function groupMeasurementsByMonth(measurements: any[]): MonthlyMeasurement[] {
 
   for (const measure of measurements) {
     for (const singleMeasure of measure.measures) {
-      
+
       const measureDate = new Date(singleMeasure.unixtime * 1000);
       const monthString = `${measureDate.getFullYear()}-${String(measureDate.getMonth() + 1).padStart(2, '0')}`; // Formato YYYY-MM
 
@@ -383,5 +503,5 @@ const getDahsBoardDataUnixTime = async (unixtime: number, id_station: number): P
 
 
 
-export { getDahsBoardData, getDahsBoardDataUnixTime, getDahsBoardDataBeTweenDates, getDahsBoardDataBeTweenMonth };
+export { getDahsBoardData, getDahsBoardDataUnixTime, getDahsBoardDataBeTweenDates, getDahsBoardDataBeTweenMonth, getDashBoardDataGroupbyHour };
 export default stationParameter;
