@@ -5,6 +5,25 @@ import IMeasure from "../interfaces/IMeasure";
 
 const measureRouter = Router();
 
+measureRouter.post("/teste", async (req: Request, res: Response) => {
+  const { value, unixtime, station_parameter_id } = req.body;
+
+  const newMeasure: IMeasure = {
+    value,
+    unixtime,
+    station_parameter_id: {
+      station_parameter_id: station_parameter_id?.station_parameter_id
+    }
+  };
+
+  try {
+    const createdMeasure = await createMeasure(newMeasure);
+    return res.status(200).json(createdMeasure);
+  } catch (error) {
+    return res.status(500).json({ message: "Erro ao criar medida", error: error.message });
+  }
+});
+
 measureRouter.get("/", async (_req: Request, res: Response) => {
     try {
       const measures = await getMeasures();
